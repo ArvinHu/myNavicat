@@ -2,26 +2,15 @@ package com.milla.navicat.pojo.dto;
 
 import com.milla.navicat.pojo.vo.AccountVO;
 
-/**
- * @Package: com.milla.navicat.pojo.dto
- * @Description: <>
- * @Author: MILLA
- * @CreateDate: 2019/8/16 10:44
- * @UpdateUser: MILLA
- * @UpdateDate: 2019/8/16 10:44
- * @UpdateRemark: <>
- * @Version: 1.0
- */
 public class AccountDTO extends AccountVO {
-    //加盐
-    private String salt;
 
+    private String email;
 
-    public String getSalt() {
-        return salt;
+    public String getEmail() {
+        return email;
     }
 
-    public void setSalt(String salt) {
-        this.salt = salt;
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
     }
 }
