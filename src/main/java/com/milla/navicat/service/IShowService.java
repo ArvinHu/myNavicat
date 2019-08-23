@@ -1,6 +1,9 @@
 package com.milla.navicat.service;
 
 import com.milla.navicat.comm.ResponseData;
+import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
+
+import java.util.List;
 
 /**
  * @Package: com.milla.navicat.service
@@ -13,9 +16,9 @@ import com.milla.navicat.comm.ResponseData;
  * @Version: 1.0
  */
 public interface IShowService {
-    ResponseData listDatabase();
+    List<String> listDatabase(DataSourceVO dataSource);
 
-    ResponseData listTable();
+    ResponseData listTable(DataSourceVO dataSource);
 
     ResponseData listView();
 

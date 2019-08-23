@@ -1,8 +1,12 @@
 package com.milla.navicat.service.impl;
 
 import com.milla.navicat.comm.ResponseData;
+import com.milla.navicat.config.datasource.JDBCUtil;
+import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
 import com.milla.navicat.service.IShowService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Package: com.milla.navicat.service.impl
@@ -17,12 +21,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ShowServiceImpl implements IShowService {
     @Override
-    public ResponseData listDatabase() {
-        return null;
+    public List<String> listDatabase(DataSourceVO dataSource) {
+        return JDBCUtil.listDatabase(dataSource);
     }
 
     @Override
-    public ResponseData listTable() {
+    public ResponseData listTable(DataSourceVO dataSource) {
         return null;
     }
 

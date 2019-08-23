@@ -1,12 +1,15 @@
 package com.milla.navicat.controller;
 
 import com.milla.navicat.comm.ResponseData;
+import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
 import com.milla.navicat.service.IShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Package: com.milla.navicat.controller
@@ -26,13 +29,13 @@ public class ShowController {
     IShowService service;
 
     @GetMapping(value = "/databases")
-    public ResponseData listDatabase() {
-        return service.listDatabase();
+    public List<String> listDatabase(DataSourceVO dataSource) {
+        return service.listDatabase(dataSource);
     }
 
     @GetMapping(value = "/tables")
-    public ResponseData listTable() {
-        return service.listTable();
+    public ResponseData listTable(DataSourceVO dataSource) {
+        return service.listTable(dataSource);
     }
 
     @GetMapping(value = "/views")
