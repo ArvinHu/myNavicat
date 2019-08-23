@@ -24,12 +24,15 @@ public final class HikariDataSourceUtil {
     private static HikariConfig config;
 
     static DataSource initDatasource(DataSourceVO dataSource) {
+        if (dataSource.getDatabaseType() == null) {
+            throw new DataSourceException("数据库种类不能为空");
+        }
         return initDatasource(dataSource.getDatasourceId(), dataSource.getDatabaseType().getDriverClass(), dataSource.getUrl(), dataSource.getUsername(), dataSource.getPassword());
     }
 
     static DataSource initDatasource(String poolName, String driverClassName, String jdbcUrl, String username, String password) {
         if (StringUtils.isAnyBlank(driverClassName, jdbcUrl, username, password)) {
-            throw new DataSourceException("数据库连接参数不能为空");
+            throw new DataSourceException("数据库连接参数缺失");
         }
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setPoolName(poolName);

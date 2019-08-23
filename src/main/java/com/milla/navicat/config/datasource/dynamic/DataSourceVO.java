@@ -1,5 +1,7 @@
 package com.milla.navicat.config.datasource.dynamic;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @Package: com.milla.navicat.config.datasource.dynamic
  * @Description: <数据库实体>
@@ -13,6 +15,12 @@ package com.milla.navicat.config.datasource.dynamic;
 public class DataSourceVO {
 
     private String datasourceId;//数据库名称
+
+    private String host;//数据库ip地址
+
+    private Integer port;//数据库端口
+
+    private String database;//数据库实例名称
 
     private String url;//数据库地址
 
@@ -33,6 +41,10 @@ public class DataSourceVO {
     }
 
     public String getUrl() {
+        if (StringUtils.isBlank(url)) {
+            String url = databaseType.getPreJdbcUrl() + host + ":" + (port == null ? databaseType.getPort() : port) + (StringUtils.isNotBlank(database) ? databaseType.getPreDatabase() + database : "");
+            this.url = url;
+        }
         return url;
     }
 
@@ -70,5 +82,29 @@ public class DataSourceVO {
 
     public void setDatabaseType(DatabaseCategory databaseType) {
         this.databaseType = databaseType;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
     }
 }

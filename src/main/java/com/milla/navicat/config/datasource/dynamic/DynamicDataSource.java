@@ -30,6 +30,13 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     private Object dynamicDefaultTargetDataSource;
 
+    /**
+     * 确定当前的查找键。这通常会
+     * 实现以检查线程绑定的事务上下文。
+     * 允许任意键。如{@link #resolveSpecifiedLookupKey} 方法。
+     *
+     * @return 返回的密钥需要与存储的查找密钥类型匹配
+     */
     @Override
     protected Object determineCurrentLookupKey() {
         String datasource = DBContextHolder.getDataSource();
@@ -40,7 +47,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
                     log.debug("---当前数据源：{}", datasource);
                 } else {
                     try {
-                        throw new DataSourceException("不存在的数据源：" + datasource, 500);
+                        throw new DataSourceException("不存在的数据源：" + datasource);
                     } catch (DataSourceException e) {
                         e.printStackTrace();
                     }
@@ -52,10 +59,18 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         return datasource;
     }
 
-
+    /**
+     * 指定目标数据源的映射，查找键为键。
+     * 映射的值可以是相应的{@link javax.sql.DataSource}
+     * 实例或数据源名称字符串（要通过 {@link #setDataSourceLookup DataSourceLookup}）。
+     * 键可以是任意类型的; 这个类实现了
+     * 通用查找过程只。 具体的关键表示将
+     * 由{@link #resolveSpecifiedLookupKey（Object）}和
+     * {@link #determineCurrentLookupKey（）}。
+     *
+     * @param targetDataSources
+     */
     @Override
-
-
     public void setTargetDataSources(Map<Object, Object> targetDataSources) {
         super.setTargetDataSources(targetDataSources);
         this.dynamicTargetDataSources = targetDataSources;
