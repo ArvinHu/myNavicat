@@ -42,7 +42,8 @@ public class JwtTokenProvider {
     private String createToken(Claims claims, Long expMillis) {
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
-        JwtBuilder builder = Jwts.builder().setIssuedAt(now).setClaims(claims).compressWith(CompressionCodecs.DEFLATE);
+        JwtBuilder builder = Jwts.builder().signWith(SignatureAlgorithm.HS256, signingKey).
+                setIssuedAt(now).setClaims(claims).compressWith(CompressionCodecs.DEFLATE);
         if (expMillis != null && expMillis >= 0L) {
             expMillis = nowMillis + expMillis;
             Date exp = new Date(expMillis);
@@ -61,9 +62,8 @@ public class JwtTokenProvider {
         try {
             return Jwts.parser().setSigningKey(signingKey).parseClaimsJws(token).getBody();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("密钥不匹配");
         }
-        return null;
     }
 }
 
