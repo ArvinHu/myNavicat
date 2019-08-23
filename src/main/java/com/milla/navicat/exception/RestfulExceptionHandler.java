@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.milla.navicat.comm.PropertiesReaderUtil;
 import com.milla.navicat.comm.ResponseData;
 import com.milla.navicat.constant.Constant;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
@@ -48,6 +47,19 @@ public class RestfulExceptionHandler {
     //处理CustomerMessageException
     @ExceptionHandler(CustomMessageException.class)
     public ResponseData<String> customerMessageException(CustomMessageException e) {
+        return ResponseData.error(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage());
+    }
+
+    //DataSourceException
+    @ExceptionHandler(DataSourceException.class)
+    public ResponseData<String> dataSourceException(DataSourceException e) {
+        return ResponseData.error(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage());
+    }
+
+    //jdk自带的异常
+    //处理IllegalArgumentException
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseData<String> illegalArgumentException(IllegalArgumentException e) {
         return ResponseData.error(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage());
     }
 
