@@ -50,13 +50,19 @@ public class RestfulExceptionHandler {
         return ResponseData.error(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage());
     }
 
+    //处理AccountException
+    @ExceptionHandler(AccountException.class)
+    public ResponseData<String> accountException(AccountException e) {
+        return responseData(e.getMessage(), e);
+    }
+
     //DataSourceException
     @ExceptionHandler(DataSourceException.class)
     public ResponseData<String> dataSourceException(DataSourceException e) {
         return ResponseData.error(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage());
     }
 
-    //jdk自带的异常
+    //---------------------------------------jdk/spring自带的异常----------------------------------
     //处理IllegalArgumentException
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseData<String> illegalArgumentException(IllegalArgumentException e) {

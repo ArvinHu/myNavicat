@@ -16,6 +16,15 @@ public final class Constant {
      * 用户token
      */
     public static final String C_TOKEN = "token";
+    /**
+     * 当前用户名称
+     */
+    public static final String C_CURRENT_ACCOUNT = "current_account";
+
+    /**
+     * 用户未登录
+     */
+    public static final String EX_NO_TOKEN_EXCEPTION = "1001";
 
     //--------------------------------非业务返回码---------------------------------------
     /**

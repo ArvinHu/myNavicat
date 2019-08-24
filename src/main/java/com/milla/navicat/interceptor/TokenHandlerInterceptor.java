@@ -1,5 +1,6 @@
 package com.milla.navicat.interceptor;
 
+import com.milla.navicat.exception.AccountException;
 import com.milla.navicat.pojo.vo.TokenVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import java.time.ZoneOffset;
 import java.util.Objects;
 
 import static com.milla.navicat.constant.Constant.C_TOKEN;
+import static com.milla.navicat.constant.Constant.EX_NO_TOKEN_EXCEPTION;
 
 /**
  * @Package: com.milla.navicat.interceptor
@@ -41,13 +43,11 @@ public class TokenHandlerInterceptor implements HandlerInterceptor {
             boolean isSuccess = refreshToken(tokenServer);
             //token已经过期了
             if (!isSuccess) {
-                response.sendRedirect("/account/no-token");
-                return false;
+                throw new AccountException(EX_NO_TOKEN_EXCEPTION);
             }
             return true;
         }
-        response.sendRedirect("/account/no-token");
-        return false;
+        throw new AccountException(EX_NO_TOKEN_EXCEPTION);
     }
 
     //有token快到期了重新分配token的时间
