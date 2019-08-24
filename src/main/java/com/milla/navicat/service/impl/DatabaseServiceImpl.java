@@ -1,5 +1,6 @@
 package com.milla.navicat.service.impl;
 
+import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
 import com.milla.navicat.service.IDatabaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,7 +24,7 @@ public class DatabaseServiceImpl implements IDatabaseService {
     private NamedParameterJdbcTemplate template;
 
     @Override
-    public void changeDatabase(String datasourceId) {
+    public void changeDatabase(DataSourceVO datasource) {
 
     }
 }

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.milla.navicat.mapper.DatabaseConnectionDTOMapper">
+    <resultMap id="BaseResultMap" type="com.milla.navicat.pojo.dto.DatabaseConnectionDTO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="database_host" jdbcType="VARCHAR" property="databaseHost"/>
+        <result column="database_port" jdbcType="INTEGER" property="databasePort"/>
+        <result column="database_database" jdbcType="VARCHAR" property="databaseDatabase"/>
+        <result column="database_username" jdbcType="VARCHAR" property="databaseUsername"/>
+        <result column="database_password" jdbcType="VARCHAR" property="databasePassword"/>
+        <result column="database_character_encoding" jdbcType="VARCHAR" property="databaseCharacterEncoding"/>
+        <result column="database_type" jdbcType="VARCHAR" property="databaseType"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, account, database_host, database_port, database_database, database_username, 
+    database_password, database_character_encoding, database_type
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from database_connection
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from database_connection
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.milla.navicat.pojo.dto.DatabaseConnectionDTO"
+            useGeneratedKeys="true">
+    insert into database_connection (account, database_host, database_port, 
+      database_database, database_username, database_password, 
+      database_character_encoding, database_type
+      )
+    values (#{account,jdbcType=VARCHAR}, #{databaseHost,jdbcType=VARCHAR}, #{databasePort,jdbcType=INTEGER}, 
+      #{databaseDatabase,jdbcType=VARCHAR}, #{databaseUsername,jdbcType=VARCHAR}, #{databasePassword,jdbcType=VARCHAR}, 
+      #{databaseCharacterEncoding,jdbcType=VARCHAR}, #{databaseType,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.milla.navicat.pojo.dto.DatabaseConnectionDTO" useGeneratedKeys="true">
+        insert into database_connection
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="account != null">
+                account,
+            </if>
+            <if test="databaseHost != null">
+                database_host,
+            </if>
+            <if test="databasePort != null">
+                database_port,
+            </if>
+            <if test="databaseDatabase != null">
+                database_database,
+            </if>
+            <if test="databaseUsername != null">
+                database_username,
+            </if>
+            <if test="databasePassword != null">
+                database_password,
+            </if>
+            <if test="databaseCharacterEncoding != null">
+                database_character_encoding,
+            </if>
+            <if test="databaseType != null">
+                database_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="account != null">
+                #{account,jdbcType=VARCHAR},
+            </if>
+            <if test="databaseHost != null">
+                #{databaseHost,jdbcType=VARCHAR},
+            </if>
+            <if test="databasePort != null">
+                #{databasePort,jdbcType=INTEGER},
+            </if>
+            <if test="databaseDatabase != null">
+                #{databaseDatabase,jdbcType=VARCHAR},
+            </if>
+            <if test="databaseUsername != null">
+                #{databaseUsername,jdbcType=VARCHAR},
+            </if>
+            <if test="databasePassword != null">
+                #{databasePassword,jdbcType=VARCHAR},
+            </if>
+            <if test="databaseCharacterEncoding != null">
+                #{databaseCharacterEncoding,jdbcType=VARCHAR},
+            </if>
+            <if test="databaseType != null">
+                #{databaseType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.milla.navicat.pojo.dto.DatabaseConnectionDTO">
+        update database_connection
+        <set>
+            <if test="account != null">
+                account = #{account,jdbcType=VARCHAR},
+            </if>
+            <if test="databaseHost != null">
+                database_host = #{databaseHost,jdbcType=VARCHAR},
+            </if>
+            <if test="databasePort != null">
+                database_port = #{databasePort,jdbcType=INTEGER},
+            </if>
+            <if test="databaseDatabase != null">
+                database_database = #{databaseDatabase,jdbcType=VARCHAR},
+            </if>
+            <if test="databaseUsername != null">
+                database_username = #{databaseUsername,jdbcType=VARCHAR},
+            </if>
+            <if test="databasePassword != null">
+                database_password = #{databasePassword,jdbcType=VARCHAR},
+            </if>
+            <if test="databaseCharacterEncoding != null">
+                database_character_encoding = #{databaseCharacterEncoding,jdbcType=VARCHAR},
+            </if>
+            <if test="databaseType != null">
+                database_type = #{databaseType,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.milla.navicat.pojo.dto.DatabaseConnectionDTO">
+    update database_connection
+    set account = #{account,jdbcType=VARCHAR},
+      database_host = #{databaseHost,jdbcType=VARCHAR},
+      database_port = #{databasePort,jdbcType=INTEGER},
+      database_database = #{databaseDatabase,jdbcType=VARCHAR},
+      database_username = #{databaseUsername,jdbcType=VARCHAR},
+      database_password = #{databasePassword,jdbcType=VARCHAR},
+      database_character_encoding = #{databaseCharacterEncoding,jdbcType=VARCHAR},
+      database_type = #{databaseType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,5 +1,7 @@
 package com.milla.navicat.service;
 
+import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
+
 /**
  * @Package: com.milla.navicat.service
  * @Description: <数据库操作类>
@@ -12,5 +14,5 @@ package com.milla.navicat.service;
  */
 public interface IDatabaseService {
 
-    void changeDatabase(String datasourceId);
+    void changeDatabase(DataSourceVO datasource);
 }

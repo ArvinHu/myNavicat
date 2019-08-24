@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.milla.navicat.mapper.DatasourceDTOMapper">
+    <resultMap id="BaseResultMap" type="com.milla.navicat.pojo.dto.DatasourceDTO">
+        <id column="datasource_id" jdbcType="VARCHAR" property="datasourceId"/>
+        <result column="datasource_host" jdbcType="VARCHAR" property="datasourceHost"/>
+        <result column="datasource_port" jdbcType="INTEGER" property="datasourcePort"/>
+        <result column="datasource_database" jdbcType="VARCHAR" property="datasourceDatabase"/>
+        <result column="datasource_username" jdbcType="VARCHAR" property="datasourceUsername"/>
+        <result column="datasource_password" jdbcType="VARCHAR" property="datasourcePassword"/>
+        <result column="datasource_character_encoding" jdbcType="VARCHAR" property="datasourceCharacterEncoding"/>
+        <result column="datasource_database_type" jdbcType="VARCHAR" property="datasourceDatabaseType"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    datasource_id, datasource_host, datasource_port, datasource_database, datasource_username, 
+    datasource_password, datasource_character_encoding, datasource_database_type
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from datasource
+        where datasource_id = #{datasourceId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from datasource
+    where datasource_id = #{datasourceId,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.milla.navicat.pojo.dto.DatasourceDTO">
+    insert into datasource (datasource_id, datasource_host, datasource_port, 
+      datasource_database, datasource_username, 
+      datasource_password, datasource_character_encoding, 
+      datasource_database_type)
+    values (#{datasourceId,jdbcType=VARCHAR}, #{datasourceHost,jdbcType=VARCHAR}, #{datasourcePort,jdbcType=INTEGER}, 
+      #{datasourceDatabase,jdbcType=VARCHAR}, #{datasourceUsername,jdbcType=VARCHAR}, 
+      #{datasourcePassword,jdbcType=VARCHAR}, #{datasourceCharacterEncoding,jdbcType=VARCHAR}, 
+      #{datasourceDatabaseType,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.milla.navicat.pojo.dto.DatasourceDTO">
+        insert into datasource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="datasourceId != null">
+                datasource_id,
+            </if>
+            <if test="datasourceHost != null">
+                datasource_host,
+            </if>
+            <if test="datasourcePort != null">
+                datasource_port,
+            </if>
+            <if test="datasourceDatabase != null">
+                datasource_database,
+            </if>
+            <if test="datasourceUsername != null">
+                datasource_username,
+            </if>
+            <if test="datasourcePassword != null">
+                datasource_password,
+            </if>
+            <if test="datasourceCharacterEncoding != null">
+                datasource_character_encoding,
+            </if>
+            <if test="datasourceDatabaseType != null">
+                datasource_database_type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="datasourceId != null">
+                #{datasourceId,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceHost != null">
+                #{datasourceHost,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourcePort != null">
+                #{datasourcePort,jdbcType=INTEGER},
+            </if>
+            <if test="datasourceDatabase != null">
+                #{datasourceDatabase,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceUsername != null">
+                #{datasourceUsername,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourcePassword != null">
+                #{datasourcePassword,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceCharacterEncoding != null">
+                #{datasourceCharacterEncoding,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceDatabaseType != null">
+                #{datasourceDatabaseType,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.milla.navicat.pojo.dto.DatasourceDTO">
+        update datasource
+        <set>
+            <if test="datasourceHost != null">
+                datasource_host = #{datasourceHost,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourcePort != null">
+                datasource_port = #{datasourcePort,jdbcType=INTEGER},
+            </if>
+            <if test="datasourceDatabase != null">
+                datasource_database = #{datasourceDatabase,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceUsername != null">
+                datasource_username = #{datasourceUsername,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourcePassword != null">
+                datasource_password = #{datasourcePassword,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceCharacterEncoding != null">
+                datasource_character_encoding = #{datasourceCharacterEncoding,jdbcType=VARCHAR},
+            </if>
+            <if test="datasourceDatabaseType != null">
+                datasource_database_type = #{datasourceDatabaseType,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where datasource_id = #{datasourceId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.milla.navicat.pojo.dto.DatasourceDTO">
+    update datasource
+    set datasource_host = #{datasourceHost,jdbcType=VARCHAR},
+      datasource_port = #{datasourcePort,jdbcType=INTEGER},
+      datasource_database = #{datasourceDatabase,jdbcType=VARCHAR},
+      datasource_username = #{datasourceUsername,jdbcType=VARCHAR},
+      datasource_password = #{datasourcePassword,jdbcType=VARCHAR},
+      datasource_character_encoding = #{datasourceCharacterEncoding,jdbcType=VARCHAR},
+      datasource_database_type = #{datasourceDatabaseType,jdbcType=VARCHAR}
+    where datasource_id = #{datasourceId,jdbcType=VARCHAR}
+  </update>
+</mapper>

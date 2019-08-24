@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.milla.navicat.mapper.DatasourceDTOMapperExt">
+    <resultMap id="BaseResultMapExt" type="com.milla.navicat.pojo.dto.DatasourceDTO"
+               extends="com.milla.navicat.mapper.DatasourceDTOMapper.BaseResultMap">
+    </resultMap>
+    <sql id="Base_Column_List">
+    datasource_id, datasource_host, datasource_port, datasource_database, datasource_username,
+    datasource_password, datasource_character_encoding, datasource_database_type
+  </sql>
+</mapper>
