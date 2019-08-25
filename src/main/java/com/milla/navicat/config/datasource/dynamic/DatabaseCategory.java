@@ -63,26 +63,26 @@ public enum DatabaseCategory {
         private static final int POSTGRES_PORT = 5432;
         private static final String POSTGRES_URL = JDBC + "postgresql://";
         private static final String POSTGRES_CLASS = "org.postgresql.Drive";
-        private static final String MYSQL = "mysql";
+        private static final String MYSQL = "MYSQL";
         private static final String MYSQL_DATABASE = "/";
         private static final int MYSQL_PORT = 3306;
         private static final String MYSQL_URL = JDBC + "mysql://";
         private static final String MYSQL_CLASS = "com.mysql.cj.jdbc.Driver";
-        private static final String ORACLE = "oracle";
+        private static final String ORACLE = "ORACLE";
         private static final int ORACLE_PORT = 1521;
         private static final String ORACLE_DATABASE = ":";
         private static final String ORACLE_URL = JDBC + "oracle:thin:@";
         private static final String ORACLE_CLASS = "oracle.jdbc.driver.OracleDriver";
-        private static final String SQLSERVER = "sqlserver";
+        private static final String SQLSERVER = "SQLSERVER";
         private static final int SQLSERVER_PORT = 1433;
         private static final String SQLSERVER_DATABASE = ";DatabaseName=";
         private static final String SQLSERVER_URL = JDBC + "microsoft:sqlserver://";
         private static final String SQLSERVER_CLASS = "com.microsoft.jdbc.sqlserver.SQLServerDriver";
 
-        private static final String HSQL_PART = "hsql";
-        private static final String H2_PART = "h2";
+        private static final String HSQL_PART = "HSQL";
+        private static final String H2_PART = "H2";
         private static final String SYBASE_SQLANY_PART = "sql anywhere";
-        private static final String SQLITE_PART = "sqlite";
+        private static final String SQLITE_PART = "SQLITE";
     }
 
     public static void main(String[] args) {
