@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.milla.navicat.comm.PropertiesReaderUtil;
 import com.milla.navicat.comm.ResponseData;
 import com.milla.navicat.constant.Constant;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
@@ -29,13 +30,18 @@ import java.io.IOException;
  * @UpdateRemark: <>
  * @Version: 1.0
  */
+@Slf4j
 @RestControllerAdvice
 public class RestfulExceptionHandler {
-    private Logger logger = LoggerFactory.getLogger(RestfulExceptionHandler.class);
 
     private ResponseData responseData(String code, Exception e) {
-        logger.error(PropertiesReaderUtil.getProperty(code), e);
+        log.error("异常代码:{},异常描述:{},异常堆栈:", code, PropertiesReaderUtil.getProperty(code), e);
         return ResponseData.error(code);
+    }
+
+    private ResponseData<String> responseData(String code, String message, Exception e) {
+        log.error("异常代码:{},异常描述:{},异常堆栈:", code, message, e);
+        return ResponseData.error(code, message);
     }
 
     //运行时异常
@@ -47,7 +53,7 @@ public class RestfulExceptionHandler {
     //处理CustomerMessageException
     @ExceptionHandler(CustomMessageException.class)
     public ResponseData<String> customerMessageException(CustomMessageException e) {
-        return ResponseData.error(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage());
+        return responseData(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage(), e);
     }
 
     //处理AccountException
@@ -59,14 +65,14 @@ public class RestfulExceptionHandler {
     //DataSourceException
     @ExceptionHandler(DataSourceException.class)
     public ResponseData<String> dataSourceException(DataSourceException e) {
-        return ResponseData.error(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage());
+        return responseData(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage(), e);
     }
 
     //---------------------------------------jdk/spring自带的异常----------------------------------
     //处理IllegalArgumentException
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseData<String> illegalArgumentException(IllegalArgumentException e) {
-        return ResponseData.error(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage());
+        return responseData(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage(), e);
     }
 
     //空指针异常
@@ -145,6 +151,6 @@ public class RestfulExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseData exceptionHandler(MethodArgumentNotValidException e) {
-        return ResponseData.errorData(Constant.PARAMS_IS_NULL, e.getBindingResult().getFieldError().getDefaultMessage());
+        return responseData(Constant.PARAMS_IS_NULL, e);
     }
 }
