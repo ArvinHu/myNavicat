@@ -5,7 +5,7 @@
                extends="com.milla.navicat.mapper.DatabaseConnectionDTOMapper.BaseResultMap">
     </resultMap>
     <sql id="Base_Column_List">
-    id, account, database_host, database_port, database_database, database_username,
+    id, account, connection_name, database_host, database_port, database_database, database_username,
     database_password, database_character_encoding, database_type
   </sql>
     <select id="selectConnectionListByAccount" resultMap="BaseResultMapExt">
@@ -13,5 +13,12 @@
         <include refid="Base_Column_List"/>
         from database_connection
         where account = #{account,jdbcType=VARCHAR}
+    </select>
+    <select id="selectConnectionByConnectionDTO" resultMap="BaseResultMapExt"
+            parameterType="com.milla.navicat.pojo.dto.DatabaseConnectionDTO">
+        select
+        <include refid="Base_Column_List"/>
+        from database_connection
+        where account = #{account,jdbcType=VARCHAR} and connection_name = #{connectionName}
     </select>
 </mapper>

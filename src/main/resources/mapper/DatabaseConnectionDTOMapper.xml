@@ -4,16 +4,18 @@
     <resultMap id="BaseResultMap" type="com.milla.navicat.pojo.dto.DatabaseConnectionDTO">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="connection_name" jdbcType="VARCHAR" property="connectionName"/>
         <result column="database_host" jdbcType="VARCHAR" property="databaseHost"/>
         <result column="database_port" jdbcType="INTEGER" property="databasePort"/>
         <result column="database_database" jdbcType="VARCHAR" property="databaseDatabase"/>
         <result column="database_username" jdbcType="VARCHAR" property="databaseUsername"/>
         <result column="database_password" jdbcType="VARCHAR" property="databasePassword"/>
         <result column="database_character_encoding" jdbcType="VARCHAR" property="databaseCharacterEncoding"/>
-        <result column="database_type" jdbcType="VARCHAR" property="databaseType"/>
+        <result column="database_type" jdbcType="VARCHAR" property="databaseType"
+                typeHandler="com.milla.navicat.handler.DatabaseCategoryHandler"/>
     </resultMap>
     <sql id="Base_Column_List">
-    id, account, database_host, database_port, database_database, database_username, 
+    id, account, connection_name, database_host, database_port, database_database, database_username, 
     database_password, database_character_encoding, database_type
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -28,14 +30,14 @@
   </delete>
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.milla.navicat.pojo.dto.DatabaseConnectionDTO"
             useGeneratedKeys="true">
-    insert into database_connection (account, database_host, database_port, 
-      database_database, database_username, database_password, 
-      database_character_encoding, database_type
-      )
-    values (#{account,jdbcType=VARCHAR}, #{databaseHost,jdbcType=VARCHAR}, #{databasePort,jdbcType=INTEGER}, 
-      #{databaseDatabase,jdbcType=VARCHAR}, #{databaseUsername,jdbcType=VARCHAR}, #{databasePassword,jdbcType=VARCHAR}, 
-      #{databaseCharacterEncoding,jdbcType=VARCHAR}, #{databaseType,jdbcType=VARCHAR}
-      )
+    insert into database_connection (account, connection_name, database_host, 
+      database_port, database_database, database_username, 
+      database_password, database_character_encoding, 
+      database_type)
+    values (#{account,jdbcType=VARCHAR}, #{connectionName,jdbcType=VARCHAR}, #{databaseHost,jdbcType=VARCHAR}, 
+      #{databasePort,jdbcType=INTEGER}, #{databaseDatabase,jdbcType=VARCHAR}, #{databaseUsername,jdbcType=VARCHAR}, 
+      #{databasePassword,jdbcType=VARCHAR}, #{databaseCharacterEncoding,jdbcType=VARCHAR}, 
+      #{databaseType,jdbcType=VARCHAR})
   </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id"
             parameterType="com.milla.navicat.pojo.dto.DatabaseConnectionDTO" useGeneratedKeys="true">
@@ -43,6 +45,9 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="account != null">
                 account,
+            </if>
+            <if test="connectionName != null">
+                connection_name,
             </if>
             <if test="databaseHost != null">
                 database_host,
@@ -69,6 +74,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="account != null">
                 #{account,jdbcType=VARCHAR},
+            </if>
+            <if test="connectionName != null">
+                #{connectionName,jdbcType=VARCHAR},
             </if>
             <if test="databaseHost != null">
                 #{databaseHost,jdbcType=VARCHAR},
@@ -99,6 +107,9 @@
             <if test="account != null">
                 account = #{account,jdbcType=VARCHAR},
             </if>
+            <if test="connectionName != null">
+                connection_name = #{connectionName,jdbcType=VARCHAR},
+            </if>
             <if test="databaseHost != null">
                 database_host = #{databaseHost,jdbcType=VARCHAR},
             </if>
@@ -126,6 +137,7 @@
     <update id="updateByPrimaryKey" parameterType="com.milla.navicat.pojo.dto.DatabaseConnectionDTO">
     update database_connection
     set account = #{account,jdbcType=VARCHAR},
+      connection_name = #{connectionName,jdbcType=VARCHAR},
       database_host = #{databaseHost,jdbcType=VARCHAR},
       database_port = #{databasePort,jdbcType=INTEGER},
       database_database = #{databaseDatabase,jdbcType=VARCHAR},

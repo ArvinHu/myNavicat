@@ -1,9 +1,13 @@
 package com.milla.navicat.pojo.dto;
 
+import com.milla.navicat.config.datasource.dynamic.DatabaseCategory;
+
 public class DatabaseConnectionDTO {
     private Integer id;
 
     private String account;
+
+    private String connectionName;
 
     private String databaseHost;
 
@@ -17,7 +21,7 @@ public class DatabaseConnectionDTO {
 
     private String databaseCharacterEncoding;
 
-    private String databaseType;
+    private DatabaseCategory databaseType;
 
     public Integer getId() {
         return id;
@@ -33,6 +37,14 @@ public class DatabaseConnectionDTO {
 
     public void setAccount(String account) {
         this.account = account == null ? null : account.trim();
+    }
+
+    public String getConnectionName() {
+        return connectionName;
+    }
+
+    public void setConnectionName(String connectionName) {
+        this.connectionName = connectionName == null ? null : connectionName.trim();
     }
 
     public String getDatabaseHost() {
@@ -83,11 +95,11 @@ public class DatabaseConnectionDTO {
         this.databaseCharacterEncoding = databaseCharacterEncoding == null ? null : databaseCharacterEncoding.trim();
     }
 
-    public String getDatabaseType() {
+    public DatabaseCategory getDatabaseType() {
         return databaseType;
     }
 
-    public void setDatabaseType(String databaseType) {
-        this.databaseType = databaseType == null ? null : databaseType.trim();
+    public void setDatabaseType(DatabaseCategory databaseType) {
+        this.databaseType = databaseType;
     }
 }

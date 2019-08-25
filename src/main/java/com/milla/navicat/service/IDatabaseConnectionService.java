@@ -1,7 +1,5 @@
 package com.milla.navicat.service;
 
-import com.milla.navicat.comm.ResponseData;
-import com.milla.navicat.pojo.dto.ConnectionDTO;
 import com.milla.navicat.pojo.dto.DatabaseConnectionDTO;
 
 import java.util.List;
@@ -20,13 +18,13 @@ public interface IDatabaseConnectionService {
 
     List<DatabaseConnectionDTO> listConnection();
 
-    ResponseData getConnection(Integer connId);
+    DatabaseConnectionDTO getConnection(Integer connId);
 
-    ResponseData testConnection(ConnectionDTO conn);
+    boolean testConnection(Integer connId);
 
-    ResponseData addConnection(ConnectionDTO conn);
+    int addConnection(DatabaseConnectionDTO conn);
 
-    ResponseData updateConnection(ConnectionDTO conn);
+    int updateConnection(DatabaseConnectionDTO conn);
 
-    ResponseData removeConnection(Integer connId);
+    int removeConnection(Integer connId);
 }

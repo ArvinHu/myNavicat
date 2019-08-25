@@ -1,11 +1,14 @@
 package com.milla.navicat.controller;
 
 import com.milla.navicat.comm.ResponseData;
-import com.milla.navicat.pojo.dto.ConnectionDTO;
+import com.milla.navicat.pojo.dto.DatabaseConnectionDTO;
 import com.milla.navicat.service.IDatabaseConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @Package: com.milla.navicat.controller
@@ -24,33 +27,33 @@ public class DatabaseConnectionController {
     private IDatabaseConnectionService service;
 
     @GetMapping(value = "/")
-    public ResponseData listConnection(@RequestHeader String token) {
+    public List<DatabaseConnectionDTO> listConnection() {
         return service.listConnection();
     }
 
     @GetMapping(value = "/{connId}")
-    public ResponseData getConnection(@PathVariable Integer connId) {
+    public DatabaseConnectionDTO getConnection(@PathVariable Integer connId) {
         return service.getConnection(connId);
     }
 
-    @GetMapping(value = "/test/")
-    public ResponseData testConnection(ConnectionDTO conn) {
-        return service.testConnection(conn);
+    @GetMapping(value = "/test/{connId}")
+    public boolean testConnection(@PathVariable Integer connId) {
+        return service.testConnection(connId);
     }
 
     @PostMapping(value = "/")
-    public ResponseData addConnection(ConnectionDTO conn) {
-        return service.addConnection(conn);
+    public void addConnection(@RequestBody @Validated DatabaseConnectionDTO conn) {
+        service.addConnection(conn);
     }
 
-    @PutMapping(value = "/{connId}")
-    public ResponseData updateConnection(ConnectionDTO conn, @PathVariable Integer connId) {
-        conn.setConnId(connId);
+    @PutMapping(value = "/{id}")
+    public int updateConnection(DatabaseConnectionDTO conn, @PathVariable Integer id) {
+        conn.setId(id);
         return service.updateConnection(conn);
     }
 
-    @DeleteMapping(value = "/{connId}")
-    public ResponseData removeConnection(@PathVariable Integer connId) {
-        return service.removeConnection(connId);
+    @DeleteMapping(value = "/{id}")
+    public int removeConnection(@PathVariable Integer id) {
+        return service.removeConnection(id);
     }
 }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface DatabaseConnectionDTOMapperExt {
     List<DatabaseConnectionDTO> selectConnectionListByAccount(String account);
+
+    DatabaseConnectionDTO selectConnectionByConnectionDTO(DatabaseConnectionDTO conn);
 }
