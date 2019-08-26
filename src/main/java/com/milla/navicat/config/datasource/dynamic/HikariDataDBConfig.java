@@ -54,7 +54,7 @@ public class HikariDataDBConfig {
     }
 
     @Bean(name = "dynamicDataSource")
-    public DataSource dynamicDataSource() {
+    public DynamicDataSource dynamicDataSource() {
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         dynamicDataSource.setDebug(true);
         dynamicDataSource.setDefaultTargetDataSource(dataSource());
