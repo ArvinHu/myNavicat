@@ -6,8 +6,7 @@ import com.milla.navicat.exception.DataSourceException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Package: com.milla.navicat.config.datasource.dynamic
@@ -21,9 +20,7 @@ import java.util.List;
  */
 public class JDBCUtil {
     public static List<String> listDatabase(DataSourceVO dataSource) {
-        if (dataSource.getDatabaseType() == null || StringUtils.isAnyBlank(dataSource.getUrl(), dataSource.getUsername(), dataSource.getPassword())) {
-            throw new DataSourceException("数据库连接参数缺失");
-        }
+        checkedDatabaseParams(dataSource);
         List<String> list = new ArrayList<>();
         try {
             Connection connection = getConnection(dataSource);
@@ -37,6 +34,37 @@ public class JDBCUtil {
             return list;
         } catch (SQLException e) {
             throw new DataSourceException("执行sql异常");
+        }
+    }
+
+    public static Map<String, Set<String>> listCharacterEncodingAndCollation(DataSourceVO dataSource) {
+        checkedDatabaseParams(dataSource);
+        try {
+            Connection connection = getConnection(dataSource);
+            PreparedStatement databases = connection.prepareStatement("show collation;");
+            ResultSet rs = databases.executeQuery();
+            Map<String, Set<String>> charSets = new HashMap<>();
+            while (rs.next()) {
+                //字符集
+                String charset = rs.getString("Charset");
+                //校对规则
+                String collation = rs.getString("Collation");
+                if (!charSets.containsKey(charset)) {
+                    charSets.put(charset, new HashSet<>());
+                }
+                Set<String> collations = charSets.get(charset);
+                collations.add(collation);
+            }
+            close(rs, null, connection);
+            return charSets;
+        } catch (SQLException e) {
+            throw new DataSourceException("执行sql异常");
+        }
+    }
+
+    private static void checkedDatabaseParams(DataSourceVO dataSource) {
+        if (dataSource.getDatabaseType() == null || StringUtils.isAnyBlank(dataSource.getUrl(), dataSource.getUsername(), dataSource.getPassword())) {
+            throw new DataSourceException("数据库连接参数缺失");
         }
     }
 
@@ -97,5 +125,4 @@ public class JDBCUtil {
             }
         }
     }
-
 }

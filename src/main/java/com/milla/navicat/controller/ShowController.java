@@ -6,6 +6,7 @@ import com.milla.navicat.service.IShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,7 +31,17 @@ public class ShowController {
 
     @GetMapping(value = "/databases")
     public List<String> listDatabase(DataSourceVO dataSource) {
-        return service.listDatabase(dataSource);
+        return null;
+    }
+
+    @GetMapping(value = "/{connId}/encodings")
+    public List<String> listCharacterEncoding(@PathVariable Integer connId) {
+        return service.listCharacterEncoding(connId);
+    }
+
+    @GetMapping(value = "/{connId}/encodings/{character}")
+    public List<String> listOrderingRuleByCharacterEncoding(@PathVariable Integer connId, @PathVariable String character) {
+        return service.listOrderingRuleByCharacterEncoding(connId, character);
     }
 
     @GetMapping(value = "/tables")

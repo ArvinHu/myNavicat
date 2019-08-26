@@ -4,6 +4,7 @@ import com.milla.navicat.comm.ResponseData;
 import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Package: com.milla.navicat.service
@@ -16,7 +17,7 @@ import java.util.List;
  * @Version: 1.0
  */
 public interface IShowService {
-    List<String> listDatabase(DataSourceVO dataSource);
+    List<String> listDatabase(Integer connId);
 
     ResponseData listTable(DataSourceVO dataSource);
 
@@ -26,4 +27,7 @@ public interface IShowService {
 
     ResponseData listEvent();
 
+    List<String> listCharacterEncoding(Integer connId);
+
+    List<String> listOrderingRuleByCharacterEncoding(Integer connId, String character);
 }
