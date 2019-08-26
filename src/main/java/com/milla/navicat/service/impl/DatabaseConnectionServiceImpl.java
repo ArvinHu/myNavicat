@@ -44,7 +44,7 @@ public class DatabaseConnectionServiceImpl implements IDatabaseConnectionService
     }
 
     @Override
-    public DatabaseConnectionDTO getConnection(Integer connId) {
+    public DatabaseConnectionDTO getConnectionByConnId(Integer connId) {
         return checkDatabaseConnectionExist(connId);
     }
 
@@ -66,6 +66,18 @@ public class DatabaseConnectionServiceImpl implements IDatabaseConnectionService
             return false;
         }
         return true;
+    }
+
+    @Override
+    public DataSourceVO getDataSourceVO(DatabaseConnectionDTO connection) {
+        DataSourceVO dataSource = new DataSourceVO();
+        dataSource.setUsername(connection.getDatabaseUsername());
+        dataSource.setPassword(connection.getDatabasePassword());
+        dataSource.setDatabaseType(connection.getDatabaseType());
+        dataSource.setHost(connection.getDatabaseHost());
+        dataSource.setDatabase(connection.getDatabaseDatabase());
+        dataSource.setDatasourceId(dataSource.getHost() + "-" + dataSource.getDatabase());
+        return dataSource;
     }
 
     @Override

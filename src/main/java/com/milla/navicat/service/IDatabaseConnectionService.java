@@ -1,5 +1,6 @@
 package com.milla.navicat.service;
 
+import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
 import com.milla.navicat.pojo.dto.DatabaseConnectionDTO;
 
 import java.util.List;
@@ -18,9 +19,11 @@ public interface IDatabaseConnectionService {
 
     List<DatabaseConnectionDTO> listConnection();
 
-    DatabaseConnectionDTO getConnection(Integer connId);
+    DatabaseConnectionDTO getConnectionByConnId(Integer connId);
 
     boolean testConnection(Integer connId);
+
+    DataSourceVO getDataSourceVO(DatabaseConnectionDTO connection);
 
     int addConnection(DatabaseConnectionDTO conn);
 

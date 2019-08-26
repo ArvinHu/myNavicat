@@ -1,6 +1,5 @@
 package com.milla.navicat.controller;
 
-import com.milla.navicat.comm.ResponseData;
 import com.milla.navicat.pojo.dto.DatabaseConnectionDTO;
 import com.milla.navicat.service.IDatabaseConnectionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class DatabaseConnectionController {
 
     @GetMapping(value = "/{connId}")
     public DatabaseConnectionDTO getConnection(@PathVariable Integer connId) {
-        return service.getConnection(connId);
+        return service.getConnectionByConnId(connId);
     }
 
     @GetMapping(value = "/test/{connId}")
