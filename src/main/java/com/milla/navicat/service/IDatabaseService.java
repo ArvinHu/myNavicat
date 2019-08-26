@@ -1,6 +1,7 @@
 package com.milla.navicat.service;
 
 import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
+import com.milla.navicat.pojo.vo.DatabaseVO;
 
 /**
  * @Package: com.milla.navicat.service
@@ -15,4 +16,6 @@ import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
 public interface IDatabaseService {
 
     void changeDatabase(DataSourceVO datasource);
+
+    int addDatabase(DatabaseVO database);
 }

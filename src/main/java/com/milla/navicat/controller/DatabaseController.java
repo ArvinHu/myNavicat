@@ -1,14 +1,13 @@
 package com.milla.navicat.controller;
 
 import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
+import com.milla.navicat.pojo.vo.DatabaseVO;
 import com.milla.navicat.service.IDatabaseService;
 import com.milla.navicat.service.IShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,13 +29,19 @@ public class DatabaseController {
     @Autowired
     private IDatabaseService databaseService;
 
-    @GetMapping(value = "")
-    public List<String> listDatabase(DataSourceVO dataSource) {
-        return showService.listDatabase(dataSource);
+    @GetMapping(value = "/{connId}")
+    public List<String> listDatabase(@PathVariable Integer connId) {
+        return showService.listDatabase(connId);
     }
 
-    @GetMapping(value = "/{datasourceId}")
-    public void changeDatabase(@PathVariable String datasourceId) {
-        databaseService.changeDatabase(datasourceId);
+    @PostMapping(value = "/")
+    public int addDatabase(@RequestBody @Validated DatabaseVO database) {
+        return databaseService.addDatabase(database);
+    }
+
+    @PutMapping(value = "/{datasourceId}")
+    public void changeDatabase(@PathVariable String datasourceId, @RequestBody DataSourceVO dataSource) {
+        dataSource.setDatasourceId(datasourceId);
+        databaseService.changeDatabase(dataSource);
     }
 }
