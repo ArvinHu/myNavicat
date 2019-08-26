@@ -31,9 +31,4 @@ public class AccountController {
     public String login(AccountVO account) {
         return service.login(account);
     }
-
-    @GetMapping(value = "/no-token")
-    public String noToken() {
-        throw new CustomMessageException("用户没有登录");
-    }
 }
