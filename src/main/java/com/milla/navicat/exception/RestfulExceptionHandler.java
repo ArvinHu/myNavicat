@@ -6,8 +6,7 @@ import com.milla.navicat.comm.PropertiesReaderUtil;
 import com.milla.navicat.comm.ResponseData;
 import com.milla.navicat.constant.Constant;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.ibatis.binding.BindingException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -54,6 +53,12 @@ public class RestfulExceptionHandler {
     @ExceptionHandler(CustomMessageException.class)
     public ResponseData<String> customerMessageException(CustomMessageException e) {
         return responseData(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage(), e);
+    }
+
+    //处理BindingException
+    @ExceptionHandler(BindingException.class)
+    public ResponseData<String> bindingException(BindingException e) {
+        return responseData(Constant.EX_RUN_TIME_EXCEPTION, "数据源未绑定", e);
     }
 
     //处理AccountException
