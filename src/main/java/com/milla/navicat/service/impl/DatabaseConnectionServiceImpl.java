@@ -1,6 +1,5 @@
 package com.milla.navicat.service.impl;
 
-import com.milla.navicat.config.datasource.dynamic.DBContextHolder;
 import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
 import com.milla.navicat.config.datasource.dynamic.DynamicDataSource;
 import com.milla.navicat.exception.DataSourceException;
@@ -16,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.milla.navicat.constant.SymbolConstant.S_STRIKE_THROUGH;
 
 /**
  * @Package: com.milla.navicat.service.impl
@@ -50,22 +51,9 @@ public class DatabaseConnectionServiceImpl implements IDatabaseConnectionService
 
     @Override
     public boolean testConnection(Integer connId) {
-        DatabaseConnectionDTO databaseConnectionDTO = checkDatabaseConnectionExist(connId);
-        DataSourceVO dataSource = new DataSourceVO();
-        dataSource.setUsername(databaseConnectionDTO.getDatabaseUsername());
-        dataSource.setPassword(databaseConnectionDTO.getDatabasePassword());
-        dataSource.setDatabaseType(databaseConnectionDTO.getDatabaseType());
-        dataSource.setHost(databaseConnectionDTO.getDatabaseHost());
-        dataSource.setDatabase(databaseConnectionDTO.getDatabaseDatabase());
-        dataSource.setDatasourceId(dataSource.getHost() + "-" + dataSource.getDatabase());
-        try {
-            dynamicDataSource.createDataSourceWithCheck(dataSource);
-            DBContextHolder.changeDataSource(dataSource.getDatasourceId());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        DatabaseConnectionDTO connection = checkDatabaseConnectionExist(connId);
+        DataSourceVO dataSource = getDataSourceVO(connection);
+        return dynamicDataSource.testDatasource(dataSource.getDatabaseType().getDriverClass(), dataSource.getUrl(), dataSource.getUsername(), dataSource.getPassword());
     }
 
     @Override
@@ -76,7 +64,7 @@ public class DatabaseConnectionServiceImpl implements IDatabaseConnectionService
         dataSource.setDatabaseType(connection.getDatabaseType());
         dataSource.setHost(connection.getDatabaseHost());
         dataSource.setDatabase(connection.getDatabaseDatabase());
-        dataSource.setDatasourceId(dataSource.getHost() + "-" + dataSource.getDatabase());
+        dataSource.setDatasourceId(dataSource.getHost() + S_STRIKE_THROUGH + dataSource.getDatabase() + S_STRIKE_THROUGH + connection.getId());
         return dataSource;
     }
 
@@ -87,7 +75,7 @@ public class DatabaseConnectionServiceImpl implements IDatabaseConnectionService
         conn.setAccount(account);
         DatabaseConnectionDTO find = connectionMapperExt.selectConnectionByConnectionDTO(conn);
         if (find != null) {
-            throw new DataSourceException("数据已经存在");
+            throw new DataSourceException("连接数据已存在");
         }
         return connectionMapper.insertSelective(conn);
     }
@@ -110,7 +98,7 @@ public class DatabaseConnectionServiceImpl implements IDatabaseConnectionService
         String account = WebUtil.currentAccount();
         DatabaseConnectionDTO find = connectionMapper.selectByPrimaryKey(connId);
         if (find == null || !StringUtils.equals(account, find.getAccount())) {
-            throw new DataSourceException("数据不存在");
+            throw new DataSourceException("连接数据不存在");
         }
         return find;
     }
