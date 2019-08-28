@@ -10,8 +10,8 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import static com.milla.navicat.constant.Constant.C_TOKEN;
 import static com.milla.navicat.constant.Constant.EX_NO_TOKEN_EXCEPTION;
+import static com.milla.navicat.constant.HeaderParamConstant.C_TOKEN;
 
 /**
  * @Package: com.milla.navicat.util.token
