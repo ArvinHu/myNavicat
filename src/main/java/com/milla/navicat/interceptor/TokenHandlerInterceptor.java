@@ -1,9 +1,9 @@
 package com.milla.navicat.interceptor;
 
+import com.milla.navicat.config.datasource.dynamic.DBContextHolder;
 import com.milla.navicat.exception.AccountException;
 import com.milla.navicat.pojo.vo.TokenVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -14,8 +14,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
 
-import static com.milla.navicat.constant.Constant.C_TOKEN;
+import static com.milla.navicat.constant.HeaderParamConstant.H_TOKEN;
 import static com.milla.navicat.constant.Constant.EX_NO_TOKEN_EXCEPTION;
+import static com.milla.navicat.constant.HeaderParamConstant.H_DATASOURCE_ID;
 
 /**
  * @Package: com.milla.navicat.interceptor
@@ -36,14 +37,19 @@ public class TokenHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
-        String tokenClient = request.getHeader(C_TOKEN);
-        TokenVO tokenServer = (TokenVO) request.getSession().getAttribute(C_TOKEN);
+        String tokenClient = request.getHeader(H_TOKEN);
+        TokenVO tokenServer = (TokenVO) request.getSession().getAttribute(H_TOKEN);
         //客户端token和服务端token一致且没有过期时放行
         if (Objects.nonNull(tokenServer) && Objects.nonNull(tokenServer.getToken()) && tokenServer.getToken().length() > 0 && tokenServer.getToken().equals(tokenClient)) {
             boolean isSuccess = refreshToken(tokenServer);
             //token已经过期了
             if (!isSuccess) {
                 throw new AccountException(EX_NO_TOKEN_EXCEPTION);
+            }
+            String datasourceId = request.getHeader(H_DATASOURCE_ID);
+            //如果请求头中有数据源id，切换数据源
+            if (Objects.nonNull(datasourceId) && datasourceId.length() > 0) {
+                DBContextHolder.changeDataSource(datasourceId);
             }
             return true;
         }
