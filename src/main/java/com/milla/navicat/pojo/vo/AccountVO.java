@@ -1,5 +1,7 @@
 package com.milla.navicat.pojo.vo;
 
+import io.swagger.annotations.ApiParam;
+
 /**
  * @Package: com.milla.navicat.pojo.dto
  * @Description: <>
@@ -12,8 +14,10 @@ package com.milla.navicat.pojo.vo;
  */
 public class AccountVO {
     //用户名
+    @ApiParam(defaultValue = "coco1013")
     private String account;
     //密码
+    @ApiParam(defaultValue = "111111")
     private String password;
 
     public String getPassword() {
