@@ -1,8 +1,12 @@
 package com.milla.navicat.service.impl;
 
+import com.milla.navicat.config.datasource.dynamic.DBContextHolder;
 import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
+import com.milla.navicat.config.datasource.dynamic.DynamicDataSource;
 import com.milla.navicat.exception.DataSourceException;
+import com.milla.navicat.pojo.dto.DatabaseConnectionDTO;
 import com.milla.navicat.pojo.vo.DatabaseVO;
+import com.milla.navicat.service.IDatabaseConnectionService;
 import com.milla.navicat.service.IDatabaseService;
 import com.milla.navicat.service.IShowService;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
+
+import static com.milla.navicat.constant.SymbolConstant.S_STRIKE_THROUGH;
 
 /**
  * @Package: com.milla.navicat.service.impl
@@ -33,28 +39,64 @@ public class DatabaseServiceImpl implements IDatabaseService {
     @Autowired
     private IShowService service;
 
-    @Override
-    public void changeDatabase(DataSourceVO datasource) {
+    @Autowired
+    private IDatabaseConnectionService connectionService;
+    @Autowired
+    @Qualifier("dynamicDataSource")
+    private DynamicDataSource dynamicDataSource;
 
+    @Override
+    public void changeDatabase(String datasourceId) {
+        if (StringUtils.isBlank(datasourceId) || !datasourceId.contains(S_STRIKE_THROUGH)) {
+            throw new DataSourceException("数据源不存在");
+        }
+        int connId = Integer.parseInt(datasourceId.substring(datasourceId.lastIndexOf(S_STRIKE_THROUGH) + 1));
+        DatabaseConnectionDTO connection = connectionService.getConnectionByConnId(connId);
+        DataSourceVO dataSource = connectionService.getDataSourceVO(connection);
+        dynamicDataSource.createDataSourceWithCheck(dataSource);
+        DBContextHolder.changeDataSource(datasourceId);
     }
 
     @Override
     @Transactional
     public int addDatabase(DatabaseVO database) {
+        String sql = "CREATE DATABASE `%s` CHARACTER SET '%s' COLLATE '%s'";
+        alterDatabase(database, sql);
+        return 0;
+    }
+
+    private void alterDatabase(DatabaseVO database, String sql) {
+        //查询连接是否存在
+        connectionService.getConnectionByConnId(database.getConnId());
         //默认字段集
         if (StringUtils.isBlank(database.getCharacterEncoding())) {
             database.setCharacterEncoding("utf8");
         }
-        //默认排序规则
+        //默认排序规则[前端校验如果字段集选中的话，排序规则是必选的]
         if (StringUtils.isBlank(database.getOrderingRule())) {
-            database.setOrderingRule("utf8_spanish_ci");
+            database.setOrderingRule("utf8_general_ci");
         }
         List<String> databases = service.listDatabase(database.getConnId());
         if (database != null && databases.contains(database.getDatabaseName())) {
-            throw new DataSourceException("数据已经存在");
+            throw new DataSourceException("数据库已存在");
         }
-        String sql = "CREATE DATABASE `" + database.getDatabaseName() + "` CHARACTER SET '" + database.getCharacterEncoding() + "' COLLATE '" + database.getOrderingRule() + "'";
-        template.update(sql, new HashMap<>());
+        String format = String.format(sql, database.getDatabaseName(), database.getCharacterEncoding(), database.getOrderingRule());
+        template.update(format, new HashMap<>());
+    }
+
+    @Override
+    @Transactional
+    public int updateDatabase(DatabaseVO database) {
+        String sql = "ALTER DATABASE `%s` CHARACTER SET '%s' COLLATE '%s'";
+        alterDatabase(database, sql);
+        return 0;
+    }
+
+    @Override
+    @Transactional
+    public int removeDatabase(DatabaseVO database) {
+        String sql = "DROP DATABASE IF EXISTS `%s`";
+        template.update(String.format(sql, database.getDatabaseName()), new HashMap<>());
         return 0;
     }
 }

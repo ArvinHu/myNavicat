@@ -34,14 +34,28 @@ public class DatabaseController {
         return showService.listDatabase(connId);
     }
 
+    @GetMapping(value = "/{connId}/{databaseName}")
+    public DatabaseVO getDatabaseByDatabaseName(@PathVariable Integer connId, @PathVariable String databaseName) {
+        return showService.getDatabaseByDatabaseName(connId, databaseName);
+    }
+
     @PostMapping(value = "/")
     public int addDatabase(@RequestBody @Validated DatabaseVO database) {
         return databaseService.addDatabase(database);
     }
 
+    @PutMapping(value = "/")
+    public int updateDatabase(@RequestBody @Validated DatabaseVO database) {
+        return databaseService.updateDatabase(database);
+    }
+
+    @DeleteMapping(value = "/")
+    public int removeDatabase(@RequestBody @Validated DatabaseVO database) {
+        return databaseService.removeDatabase(database);
+    }
+
     @PutMapping(value = "/{datasourceId}")
-    public void changeDatabase(@PathVariable String datasourceId, @RequestBody DataSourceVO dataSource) {
-        dataSource.setDatasourceId(datasourceId);
-        databaseService.changeDatabase(dataSource);
+    public void changeDatabase(@PathVariable String datasourceId) {
+        databaseService.changeDatabase(datasourceId);
     }
 }
