@@ -13,10 +13,6 @@ package com.milla.navicat.constant;
  */
 public final class Constant {
     /**
-     * 用户token
-     */
-    public static final String C_TOKEN = "token";
-    /**
      * 当前用户名称
      */
     public static final String C_CURRENT_ACCOUNT = "current_account";
