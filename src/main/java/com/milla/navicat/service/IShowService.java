@@ -2,9 +2,9 @@ package com.milla.navicat.service;
 
 import com.milla.navicat.comm.ResponseData;
 import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
+import com.milla.navicat.pojo.vo.DatabaseVO;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @Package: com.milla.navicat.service
@@ -19,7 +19,7 @@ import java.util.Set;
 public interface IShowService {
     List<String> listDatabase(Integer connId);
 
-    ResponseData listTable(DataSourceVO dataSource);
+    ResponseData listTable();
 
     ResponseData listView();
 
@@ -27,7 +27,29 @@ public interface IShowService {
 
     ResponseData listEvent();
 
+    /**
+     * 根据连接id查询字符集信息
+     *
+     * @param connId
+     * @return
+     */
     List<String> listCharacterEncoding(Integer connId);
 
+    /**
+     * 根据字符集查询排序规则信息
+     *
+     * @param connId
+     * @param character
+     * @return
+     */
     List<String> listOrderingRuleByCharacterEncoding(Integer connId, String character);
+
+    /**
+     * 数据库详情信息
+     *
+     * @param connId
+     * @param databaseName
+     * @return
+     */
+    DatabaseVO getDatabaseByDatabaseName(Integer connId, String databaseName);
 }

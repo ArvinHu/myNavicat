@@ -3,6 +3,7 @@ package com.milla.navicat.interceptor;
 import com.milla.navicat.config.datasource.dynamic.DBContextHolder;
 import com.milla.navicat.exception.AccountException;
 import com.milla.navicat.pojo.vo.TokenVO;
+import com.milla.navicat.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
 
+import static com.milla.navicat.constant.HeaderParamConstant.C_TABLE_SCHEMA;
 import static com.milla.navicat.constant.HeaderParamConstant.C_TOKEN;
 import static com.milla.navicat.constant.Constant.EX_NO_TOKEN_EXCEPTION;
 import static com.milla.navicat.constant.HeaderParamConstant.C_DATASOURCE_ID;
@@ -50,6 +52,7 @@ public class TokenHandlerInterceptor implements HandlerInterceptor {
             //如果请求头中有数据源id，切换数据源
             if (Objects.nonNull(datasourceId) && datasourceId.length() > 0) {
                 DBContextHolder.changeDataSource(datasourceId);
+                WebUtil.getSession().setAttribute(C_TABLE_SCHEMA, datasourceId);
             }
             return true;
         }

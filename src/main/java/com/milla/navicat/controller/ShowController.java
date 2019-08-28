@@ -46,7 +46,7 @@ public class ShowController {
 
     @GetMapping(value = "/tables")
     public ResponseData listTable(DataSourceVO dataSource) {
-        return service.listTable(dataSource);
+        return service.listTable();
     }
 
     @GetMapping(value = "/views")

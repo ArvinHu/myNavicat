@@ -54,12 +54,11 @@ public class HikariDataDBConfig {
     }
 
     @Bean(name = "dynamicDataSource")
-    public DynamicDataSource dynamicDataSource() {
+    public DynamicDataSource dynamicDataSource(@Qualifier("defaultDataSource") DataSource dataSource) {
         DynamicDataSource dynamicDataSource = new DynamicDataSource();
         dynamicDataSource.setDebug(true);
-        dynamicDataSource.setDefaultTargetDataSource(dataSource());
+        dynamicDataSource.setDefaultTargetDataSource(dataSource);
         Map<Object, Object> targetDataSources = new HashMap<>();
-        targetDataSources.put("defaultDataSource", dataSource());
         dynamicDataSource.setTargetDataSources(targetDataSources);
         return dynamicDataSource;
     }
@@ -87,23 +86,23 @@ public class HikariDataDBConfig {
         return pageInterceptor;
     }
 
-    @Bean
-    public SqlSessionFactory sqlSessionFactory(PageInterceptor pageHelper, @Qualifier("defaultDataSource") DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
-        sqlSessionFactory.setDataSource(dataSource);
-        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sqlSessionFactory.setMapperLocations(resolver.getResources("classpath:mapper/**/*.xml"));
-        sqlSessionFactory.setPlugins(new Interceptor[]{pageHelper});
-        sqlSessionFactory.setTypeAliasesPackage("com.milla.navicat.mapper");
-        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
-        //configuration.setMapUnderscoreToCamelCase(true);
-        configuration.setCallSettersOnNulls(true);
-        //全局字段配置
-//        Properties properties = new Properties();
-        //数据库实例名称
-//        properties.setProperty("tableSchema", tableSchema);
-//        configuration.setVariables(properties);
-        sqlSessionFactory.setConfiguration(configuration);
-        return sqlSessionFactory.getObject();
-    }
+//    @Bean
+//    public SqlSessionFactory sqlSessionFactory(PageInterceptor pageHelper, @Qualifier("defaultDataSource") DataSource dataSource) throws Exception {
+//        SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
+//        sqlSessionFactory.setDataSource(dataSource);
+//        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+//        sqlSessionFactory.setMapperLocations(resolver.getResources("classpath:mapper/**/*.xml"));
+//        sqlSessionFactory.setPlugins(new Interceptor[]{pageHelper});
+//        sqlSessionFactory.setTypeAliasesPackage("com.milla.navicat.mapper");
+//        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+//        //configuration.setMapUnderscoreToCamelCase(true);
+//        configuration.setCallSettersOnNulls(true);
+//        //全局字段配置
+////        Properties properties = new Properties();
+//        //数据库实例名称
+////        properties.setProperty("tableSchema", tableSchema);
+////        configuration.setVariables(properties);
+//        sqlSessionFactory.setConfiguration(configuration);
+//        return sqlSessionFactory.getObject();
+//    }
 }

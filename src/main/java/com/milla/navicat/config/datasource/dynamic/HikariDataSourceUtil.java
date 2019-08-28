@@ -23,6 +23,11 @@ public final class HikariDataSourceUtil {
     //默认配置[静态注入]
     private static HikariConfig config;
 
+    @Autowired
+    public void setConfig(HikariConfig config) {
+        this.config = config;
+    }
+
     static DataSource initDatasource(DataSourceVO dataSource) {
         if (dataSource.getDatabaseType() == null) {
             throw new DataSourceException("数据库种类不能为空");
@@ -41,7 +46,7 @@ public final class HikariDataSourceUtil {
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         //各参数配置
-        defaultConfig(dataSource);
+//        defaultConfig(dataSource);
         return dataSource;
     }
 
@@ -58,8 +63,4 @@ public final class HikariDataSourceUtil {
         return initDatasource("defaultPoolName", driverClassName, jdbcUrl, username, password);
     }
 
-    @Autowired
-    public void setConfig(HikariConfig config) {
-        this.config = config;
-    }
 }

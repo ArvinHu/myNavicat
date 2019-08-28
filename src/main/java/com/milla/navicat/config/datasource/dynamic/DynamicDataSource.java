@@ -8,6 +8,7 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,15 +40,15 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      */
     @Override
     protected Object determineCurrentLookupKey() {
-        String datasource = DBContextHolder.getDataSource();
+        String datasourceId = DBContextHolder.getDataSource();
         if (debug) {
-            if (Objects.nonNull(datasource)) {
+            if (Objects.nonNull(datasourceId)) {
                 Map<Object, Object> dynamicTargetDataSources2 = this.dynamicTargetDataSources;
-                if (dynamicTargetDataSources2.containsKey(datasource)) {
-                    log.debug("---当前数据源：{}", datasource);
+                if (dynamicTargetDataSources2.containsKey(datasourceId)) {
+                    log.debug("---当前数据源：{}", datasourceId);
                 } else {
                     try {
-                        throw new DataSourceException("不存在的数据源：" + datasource);
+                        throw new DataSourceException("不存在的数据源：" + datasourceId);
                     } catch (DataSourceException e) {
                         e.printStackTrace();
                     }
@@ -56,7 +57,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
                 log.debug("---当前数据源：默认数据源---");
             }
         }
-        return datasource;
+        return datasourceId;
     }
 
     /**
@@ -201,7 +202,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     }
 
 
-    public void createDataSourceWithCheck(DataSourceVO dataSource) throws Exception {
+    public void createDataSourceWithCheck(DataSourceVO dataSource) {
         String datasourceId = dataSource.getDatasourceId();
         log.info("准备创建数据源" + datasourceId);
         Map<Object, Object> dynamicTargetDataSources2 = this.dynamicTargetDataSources;
@@ -231,7 +232,12 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 //                }
             } finally {
                 if (null != connection) {
-                    connection.close();
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        log.info("数据源" + datasourceId + "关闭异常...");
+                        throw new DataSourceException("数据源关闭报异常");
+                    }
                 }
             }
             if (rightFlag) {
@@ -248,7 +254,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
     }
 
-    private void createDataSource(DataSourceVO dataSource) throws Exception {
+    private void createDataSource(DataSourceVO dataSource) {
         String datasourceId = dataSource.getDatasourceId();
         log.info("准备创建数据源:{}", datasourceId);
         DatabaseCategory databaseType = dataSource.getDatabaseType();

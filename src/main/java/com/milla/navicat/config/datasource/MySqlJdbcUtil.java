@@ -3,6 +3,7 @@ package com.milla.navicat.config.datasource;
 import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
 import com.milla.navicat.config.datasource.dynamic.DatabaseCategory;
 import com.milla.navicat.exception.DataSourceException;
+import com.milla.navicat.pojo.vo.DatabaseVO;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.*;
@@ -18,31 +19,36 @@ import java.util.*;
  * @UpdateRemark: <>
  * @Version: 1.0
  */
-public class JDBCUtil {
+public class MySqlJdbcUtil {
     public static List<String> listDatabase(DataSourceVO dataSource) {
         checkedDatabaseParams(dataSource);
+        ResultSet rs = null;
+        Connection connection = null;
         List<String> list = new ArrayList<>();
         try {
-            Connection connection = getConnection(dataSource);
+            connection = getConnection(dataSource);
             PreparedStatement databases = connection.prepareStatement("show databases;");
-            ResultSet rs = databases.executeQuery();
+            rs = databases.executeQuery();
             while (rs.next()) {
                 String database = rs.getString("Database");
                 list.add(database);
             }
-            close(rs, null, connection);
             return list;
         } catch (SQLException e) {
             throw new DataSourceException("执行sql异常");
+        } finally {
+            close(rs, null, connection);
         }
     }
 
     public static Map<String, Set<String>> listCharacterEncodingAndCollation(DataSourceVO dataSource) {
         checkedDatabaseParams(dataSource);
+        ResultSet rs = null;
+        Connection connection = null;
         try {
-            Connection connection = getConnection(dataSource);
+            connection = getConnection(dataSource);
             PreparedStatement databases = connection.prepareStatement("show collation;");
-            ResultSet rs = databases.executeQuery();
+            rs = databases.executeQuery();
             Map<String, Set<String>> charSets = new HashMap<>();
             while (rs.next()) {
                 //字符集
@@ -55,10 +61,11 @@ public class JDBCUtil {
                 Set<String> collations = charSets.get(charset);
                 collations.add(collation);
             }
-            close(rs, null, connection);
             return charSets;
         } catch (SQLException e) {
             throw new DataSourceException("执行sql异常");
+        } finally {
+            close(rs, null, connection);
         }
     }
 
@@ -123,6 +130,37 @@ public class JDBCUtil {
             } catch (SQLException e) {
                 throw new DataSourceException("关闭connection失败");
             }
+        }
+    }
+
+    public static DatabaseVO getDatabaseByDatabaseName(DataSourceVO dataSource, String name) {
+        checkedDatabaseParams(dataSource);
+        ResultSet rs = null;
+        Connection connection = null;
+        try {
+            connection = getConnection(dataSource);
+            PreparedStatement databases = connection.prepareStatement("show create database `" + name + "`;");
+            rs = databases.executeQuery();
+            while (rs.next()) {
+                DatabaseVO vo = new DatabaseVO();
+                String description = rs.getString("Create Database");
+                String collateKey = "COLLATE";
+                String characterSetKey = "CHARACTER SET";
+                int collate = description.lastIndexOf(collateKey);
+                int characterSet = description.lastIndexOf(characterSetKey);
+                if (collate != -1) {
+                    vo.setOrderingRule(description.substring(collate + collateKey.length(), description.length() - 2).trim());
+                    vo.setCharacterEncoding(description.substring(characterSet + characterSetKey.length(), collate).trim());
+                    return vo;
+                }
+                vo.setCharacterEncoding(description.substring(characterSet + characterSetKey.length(), description.length() - 2).trim());
+                return vo;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new DataSourceException("执行sql异常");
+        } finally {
+            close(rs, null, connection);
         }
     }
 }

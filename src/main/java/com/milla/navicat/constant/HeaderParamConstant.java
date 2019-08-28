@@ -17,6 +17,10 @@ public final class HeaderParamConstant {
      */
     public static final String C_TOKEN = "token";
     /**
+     * 数据库名称
+     */
+    public static final String C_TABLE_SCHEMA = "table_schema";
+    /**
      * 数据源id
      */
     public static final String C_DATASOURCE_ID = "datasourceId";
