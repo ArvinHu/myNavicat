@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import static com.milla.navicat.constant.Constant.C_CURRENT_ACCOUNT;
-import static com.milla.navicat.constant.Constant.C_TOKEN;
+import static com.milla.navicat.constant.HeaderParamConstant.C_TOKEN;
 
 /**
  * @Package: com.milla.navicat.service.impl
