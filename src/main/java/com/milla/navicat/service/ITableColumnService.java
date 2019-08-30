@@ -15,5 +15,7 @@ import java.util.List;
  * @Version: 1.0
  */
 public interface ITableColumnService {
-    List<TableColumnVO> listFieldsByTableName(String tableName);
+    List<TableColumnVO> listColumnByTableName(String tableName);
+
+    String validateTableColumn(TableColumnVO column);
 }

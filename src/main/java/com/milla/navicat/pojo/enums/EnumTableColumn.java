@@ -16,42 +16,42 @@ public enum EnumTableColumn {
     /**
      * 小整数值1字节	(-128，127)	(0，255)
      */
-    TINYINT(255),
+    TINYINT(255, 4),
 
     /**
      * 大整数值2字节	(-32768，32767)	(0，65535)
      */
-    SMALLINT(255),
+    SMALLINT(255, 6),
 
     /**
      * 大整数值3字节	(-8388608，8388607)	(0，16777215)
      */
-    MEDIUMINT(255),
+    MEDIUMINT(255, 9),
 
     /**
      * 大整数值4字节	(-2147483648，2147483647)	(0，4294967295)
      */
-    INTEGER(255),
+    INTEGER(255, 11),
 
     /**
      * 极大整数值8字节	(-9,223,372,036,854,775,808，9223372036854775807)	(0，18446744073709551615)
      */
-    BIGINT(255),
+    BIGINT(255, 20),
 
     /**
      * 单精度浮点数值4字节	(-3.402823466E+38，-1.175494351E-38)，0，(1.175494351E-38，3.402823466351E+38)	0，(1.175494351E-38，3.402823466E+38)
      */
-    FLOAT(255, 30),
+    FLOAT(255, 30, 0, 0),
 
     /**
      * 双精度浮点数值8字节	(-1.7976931348623157E+308，-2.2250738585072014E-308)，0，(2.2250738585072014E-308，1.7976931348623157E+308)	0，(2.2250738585072014E-308，1.7976931348623157E+308)
      */
-    DOUBLE(255, 30),
+    DOUBLE(255, 30, 0, 0),
 
     /**
      * 小数值对DECIMAL(M,D)，如果M>D，为M+2否则为D+2	依赖于M和D的值	依赖于M和D的值
      */
-    DECIMAL(255, 30),
+    DECIMAL(255, 30, 10, 0),
 
     /**
      * 日期值3字节	1000-01-01/9999-12-31	YYYY-MM-DD
@@ -81,65 +81,73 @@ public enum EnumTableColumn {
     /**
      * 定长字符串0-255字节
      */
-    CHAR(255),
+    CHAR(255, 0),
 
     /**
      * 变长字符串0-65535字节
      */
-    VARCHAR(65535),
+    VARCHAR(65535, 0),
 
     /**
      * 个字符的二进制字符串0-255字节	不超过255
      */
-    TINYBLOB(255),
+    TINYBLOB(255, 0),
 
     /**
      * 短文本字符串0-255字节
      */
-    TINYTEXT(65535),
+    TINYTEXT(65535, 0),
 
     /**
      * 二进制形式的长文本数据0-65535字节
      */
-    BLOB(65535),
+    BLOB(65535, 0),
 
     /**
      * 长文本数据0-65535字节
      */
-    TEXT(16777215),
+    TEXT(16777215, 0),
 
     /**
      * 二进制形式的中等长度文本数据0-16777215字节
      */
-    MEDIUMBLOB(16777215),
+    MEDIUMBLOB(16777215, 0),
 
     /**
      * 中等长度文本数据0-16777215字节
      */
-    MEDIUMTEXT(16777215),
+    MEDIUMTEXT(16777215, 0),
 
     /**
      * 二进制形式的极大文本数据0-4294967295字节
      */
-    LONGBLOB(4294967295L),
+    LONGBLOB(4294967295L, 0),
 
     /**
      * 极大文本数据0-4294967295字节
      */
-    LONGTEXT(4294967295L);
+    LONGTEXT(4294967295L, 0);
 
     //显示宽度
     private long length;
     //小数点
     private int scale;
+    //默认显示宽度
+    private long defaultLength;
+    //默认小数点
+    private int defaultScale;
 
-    EnumTableColumn(long length) {
+
+    EnumTableColumn(long length, int scale, long defaultLength, int defaultScale) {
+        this.scale = scale;
         this.length = length;
+        this.defaultScale = defaultScale;
+        this.defaultLength = defaultLength;
     }
 
-    EnumTableColumn(long length, int scale) {
+    EnumTableColumn(long length, long defaultLength) {
         this.length = length;
-        this.scale = scale;
+        this.defaultLength = defaultLength;
     }
 
     EnumTableColumn() {
@@ -151,5 +159,13 @@ public enum EnumTableColumn {
 
     public int getScale() {
         return scale;
+    }
+
+    public long getDefaultLength() {
+        return defaultLength;
+    }
+
+    public int getDefaultScale() {
+        return defaultScale;
     }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.milla.navicat.mapper.dynamic.TableColumnDTOMapper">
+    <resultMap id="BaseResultMap" type="com.milla.navicat.pojo.dto.TableColumnDTO">
+        <id column="COLUMN_NAME" jdbcType="VARCHAR" property="columnName"/>
+        <result column="COLUMN_DEFAULT" jdbcType="VARCHAR" property="columnDefault"/>
+        <result column="IS_NULLABLE" jdbcType="INTEGER" property="isNullable"/>
+        <result column="DATA_TYPE" jdbcType="VARCHAR" property="dataType"/>
+        <result column="COLUMN_TYPE" jdbcType="VARCHAR" property="columnType"/>
+        <result column="CHARACTER_SET_NAME" jdbcType="VARCHAR" property="characterSetName"/>
+        <result column="COLLATION_NAME" jdbcType="VARCHAR" property="collationName"/>
+        <result column="COLUMN_KEY" jdbcType="VARCHAR" property="columnKey"/>
+        <result column="EXTRA" jdbcType="VARCHAR" property="extra"/>
+        <result column="COLUMN_COMMENT" jdbcType="VARCHAR" property="columnComment"/>
+    </resultMap>
+
+    <select id="selectColumnListByTableName" resultMap="BaseResultMap" parameterType="string">
+        SELECT
+            sys.COLUMN_NAME,
+            sys.COLUMN_DEFAULT,
+            sys.IS_NULLABLE,
+            sys.DATA_TYPE,
+            sys.COLUMN_TYPE,
+            sys.CHARACTER_SET_NAME,
+            sys.COLLATION_NAME,
+            sys.COLUMN_KEY,
+            sys.EXTRA,
+            sys.COLUMN_COMMENT
+                FROM
+        information_schema.`COLUMNS` sys
+                WHERE
+        sys.TABLE_SCHEMA = 'tcc_order'
+        AND sys.TABLE_NAME = #{tableName}
+    </select>
+</mapper>
