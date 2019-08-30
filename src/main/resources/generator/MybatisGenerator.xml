@@ -40,11 +40,19 @@
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-
-        <table tableName="user" domainObjectName="AccountDTO" enableCountByExample="false"
+        <table tableName="database_connection" domainObjectName="DatabaseConnectionDTO" enableCountByExample="false"
                enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <generatedKey column="id" sqlStatement="JDBC" identity="true"/>
         </table>
+
+        <!--<table tableName="datasource" domainObjectName="DatasourceDTO" enableCountByExample="false"
+               enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false">
+        </table>-->
+
+        <!--<table tableName="user" domainObjectName="AccountDTO" enableCountByExample="false"
+               enableDeleteByExample="false" enableUpdateByExample="false" enableSelectByExample="false">
+            <generatedKey column="id" sqlStatement="JDBC" identity="true"/>
+        </table>-->
 
     </context>
 </generatorConfiguration>

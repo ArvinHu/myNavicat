@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.milla.navicat.mapper.dynamic.TableIndexDTOMapper">
+    <resultMap id="BaseResultMap" type="com.milla.navicat.pojo.vo.TableIndexVO">
+        <id column="columnName" jdbcType="VARCHAR" property="columnName"/>
+        <result column="table" jdbcType="VARCHAR" property="table"/>
+        <result column="Non_unique" jdbcType="TINYINT" property="nonUnique"/>
+        <result column="Key_name" jdbcType="VARCHAR" property="keyName"/>
+        <result column="Collation" jdbcType="VARCHAR" property="collation"/>
+        <result column="Cardinality" jdbcType="VARCHAR" property="cardinality"/>
+        <result column="Index_type" jdbcType="VARCHAR" property="indexType"/>
+        <result column="Index_comment" jdbcType="VARCHAR" property="indexComment"/>
+    </resultMap>
+
+    <select id="selectIndexListByTableName" resultMap="BaseResultMap" parameterType="string">
+       SHOW INDEX FROM `${tableName}`
+    </select>
+</mapper>

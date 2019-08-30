@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.milla.navicat.mapper.dynamic.TableDTOMapper">
+    <!--查询所有表格-->
+    <select id="selectTableList" resultType="java.lang.String">
+      show tables
+    </select>
+    <!--新建表格-->
+    <update id="createTable" parameterType="java.lang.String">
+      ${sql}
+    </update>
+    <!--删除表格-->
+    <update id="dropTable" parameterType="java.lang.String">
+        DROP TABLE `${tableName}`
+    </update>
+    <!--清空表格数据-->
+    <update id="deleteTableData" parameterType="java.lang.String">
+        DELETE FROM `${tableName}`
+    </update>
+    <!--修改表格名称-->
+    <update id="alterTableName" parameterType="java.lang.String">
+        ALTER TABLE `${tableName}` RENAME TO `${newName}`
+    </update>
+    <!--复制表格[仅结构]-->
+    <update id="createTableOnlyStructureByCopy" parameterType="java.lang.String">
+        CREATE TABLE `${newTableName}` LIKE `${tableName}`
+    </update>
+    <!--复制表格[结构和数据]-->
+    <insert id="createTableByCopy" parameterType="java.lang.String">
+        INSERT INTO `${newTableName}` SELECT * FROM `${tableName}`
+    </insert>
+</mapper>
