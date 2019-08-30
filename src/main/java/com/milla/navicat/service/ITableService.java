@@ -25,4 +25,12 @@ public interface ITableService {
     void addTable(TableVO table);
 
     void addTable(String sql);
+
+    void removeTable(String tableName);
+
+    void updateTable(String tableName, String newName);
+
+    void removeTableData(String tableName);
+
+    void addTableCopy(String tableName, int category);
 }

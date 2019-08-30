@@ -34,9 +34,31 @@ public class TableController {
         tableService.addTable(table);
     }
 
-    @PostMapping(value = "/")
+    @PostMapping(value = "/sql")
     public void addTable(@RequestBody String sql) {
         tableService.addTable(sql);
+    }
+
+    //复制表 0:仅表格结构 1：表结构和数据
+    @PostMapping(value = "/{tableName}")
+    public void addTableCopy(@PathVariable String tableName, int category) {
+        tableService.addTableCopy(tableName, category);
+    }
+
+    @DeleteMapping(value = "/{tableName}")
+    public void removeTable(@PathVariable String tableName) {
+        tableService.removeTable(tableName);
+    }
+
+    //清空表格
+    @DeleteMapping(value = "/{tableName}/clear")
+    public void removeTableData(@PathVariable String tableName) {
+        tableService.removeTableData(tableName);
+    }
+
+    @PutMapping(value = "/{tableName}")
+    public void updateTable(@PathVariable String tableName, String newName) {
+        tableService.updateTable(tableName, newName);
     }
 
 

@@ -1,5 +1,7 @@
 package com.milla.navicat.mapper.dynamic;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -15,5 +17,15 @@ import java.util.List;
 public interface TableDTOMapper {
     List<String> selectTableList();
 
-    void alterTable(String sql);
+    void createTable(@Param("sql") String sql);
+
+    void dropTable(@Param("tableName") String tableName);
+
+    void alterTableName(@Param("tableName") String tableName, @Param("newName") String newName);
+
+    void deleteTableData(@Param("tableName") String tableName);
+
+    void createTableOnlyStructureByCopy(@Param("tableName") String tableName, @Param("newTableName") String newTableName);
+
+    void createTableByCopy(String tableName, String newTableName);
 }

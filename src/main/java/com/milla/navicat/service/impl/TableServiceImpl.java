@@ -1,9 +1,9 @@
 package com.milla.navicat.service.impl;
 
 import com.milla.navicat.mapper.dynamic.TableDTOMapper;
-import com.milla.navicat.pojo.enums.EnumTableColumn;
 import com.milla.navicat.pojo.vo.TableColumnVO;
 import com.milla.navicat.pojo.vo.TableVO;
+import com.milla.navicat.service.ITableColumnService;
 import com.milla.navicat.service.ITableService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
-
-import static com.milla.navicat.constant.ValueConstant.V_NO_STRING;
 
 /**
  * @Package: com.milla.navicat.service.impl
@@ -31,8 +29,12 @@ public class TableServiceImpl implements ITableService {
 
     @Override
     public List<String> listTable() {
+        //使用show命令的时候是有序的
         return mapper.selectTableList();
     }
+
+    @Autowired
+    private ITableColumnService service;
 
     @Override
     public void addTable(TableVO table) {
@@ -43,79 +45,67 @@ public class TableServiceImpl implements ITableService {
         String primaryKey = null;
         for (int i = 0, len = columns.size(); i < len; i++) {
             TableColumnVO column = columns.get(i);
-            String columnName = column.getColumnName();
-            EnumTableColumn category = column.getColumnCategory();
-            Assert.notNull(columnName, "字段名称不能为空");
-            Assert.notNull(category, "字段类型不能为空");
-
-            sql.append("  `").append(columnName).append("` ").append(category.name());
-            characterCategory(sql, category, column);
-            numberCategory(sql, category, column);
-            //是否为空
-            if (StringUtils.equalsIgnoreCase(V_NO_STRING, column.getIsNullable())) {
-                sql.append(" NOT");
-            }
-            sql.append(" NULL");
-            //是否有注释
-            if (StringUtils.isNotBlank(column.getColumnComment())) {
-                sql.append(" COMMENT").append(" '").append(column.getColumnComment()).append("'");
-            }
+            //获取每一个字段的sql
+            sql.append(service.validateTableColumn(column));
             //不是最后一个
             if (i != len - 1) {
                 sql.append(",\n");
             }
             if (column.isPrimaryKey()) {
-                primaryKey = columnName;
+                primaryKey = column.getColumnName();
             }
         }
-        sql.append("  ,PRIMARY KEY (`").append(primaryKey).append("`)");
-        mapper.alterTable(sql.toString());
+        if (StringUtils.isNotBlank(primaryKey)) {
+            sql.append("  ,PRIMARY KEY (`").append(primaryKey).append("`)");
+        }
+        addTable(sql.toString());
     }
 
     @Override
     public void addTable(String sql) {
-        mapper.alterTable(sql);
+        mapper.createTable(sql);
     }
 
-    //如果不是字符类型直接返回
-    private void characterCategory(StringBuilder sql, EnumTableColumn category, TableColumnVO column) {
-        boolean flag = category == EnumTableColumn.CHAR || category == EnumTableColumn.VARCHAR || category == EnumTableColumn.TINYBLOB || category == EnumTableColumn.TINYTEXT
-                || category == EnumTableColumn.BLOB || category == EnumTableColumn.TEXT || category == EnumTableColumn.MEDIUMBLOB || category == EnumTableColumn.MEDIUMTEXT
-                || category == EnumTableColumn.LONGBLOB || category == EnumTableColumn.LONGTEXT;
-        if (!flag) return;
-        Assert.isTrue(column.getDisplayWidth() <= category.getLength(), "字节长度不能超过" + category.getLength());
-        sql.append("(").append(category.getLength()).append(")");
-        //是否有字符集
-        if (StringUtils.isNotBlank(column.getCharacterSetName())) {
-            sql.append(" CHARACTER SET").append(column.getCharacterSetName());
-            Assert.isTrue(StringUtils.isNotBlank(column.getCollationName()), "字符集排序规则不能为空");
-            sql.append(" COLLATE").append(column.getCollationName());
-        }
+    @Override
+    public void removeTable(String tableName) {
+        Assert.isTrue(StringUtils.isNotBlank(tableName), "表格名称不能为空");
+        mapper.dropTable(tableName);
     }
 
-    //如果不是数字类型的直接返回
-    private void numberCategory(StringBuilder sql, EnumTableColumn category, TableColumnVO column) {
-        boolean numberFloat = category == EnumTableColumn.FLOAT || category == EnumTableColumn.DOUBLE || category == EnumTableColumn.DECIMAL;
-        boolean numberInteger = category == EnumTableColumn.TINYINT || category == EnumTableColumn.SMALLINT || category == EnumTableColumn.MEDIUMINT || category == EnumTableColumn.INTEGER || category == EnumTableColumn.BIGINT;
-        if (!numberFloat && !numberInteger) return;
-        Assert.isTrue(column.getDisplayWidth() <= category.getLength(), "显示宽度最多不能超过" + category.getLength());
-        Assert.isTrue(column.getScale() <= category.getScale(), "小数位数最多不能超过30");
-        sql.append("(").append(category.getLength());
-        if (numberFloat) {
-            sql.append(",").append(category.getScale());
+    @Override
+    public void updateTable(String tableName, String newName) {
+        Assert.isTrue(StringUtils.isNotBlank(tableName), "表格名称不能为空");
+        Assert.isTrue(StringUtils.isNotBlank(newName), "表格新名称不能为空");
+        List<String> tableList = listTable();
+        Assert.isTrue(tableList == null || !tableList.contains(newName), String.format("表名'%s'已存在", newName));
+        mapper.alterTableName(tableName, newName);
+    }
+
+    @Override
+    public void removeTableData(String tableName) {
+        Assert.isTrue(StringUtils.isNotBlank(tableName), "表格名称不能为空");
+        mapper.deleteTableData(tableName);
+    }
+
+    @Override
+    public void addTableCopy(String tableName, int category) {
+        Assert.isTrue(StringUtils.isNotBlank(tableName), "表格名称不能为空");
+        String newTableName = checkedExists(tableName);
+        mapper.createTableOnlyStructureByCopy(tableName, newTableName);
+        if (category == 0) {
+            return;
         }
-        sql.append(")");
-        //是否有符号
-        if (column.isSigned()) {
-            sql.append(" UNSIGNED");
+        mapper.createTableByCopy(tableName, newTableName);
+    }
+
+    private String checkedExists(String tableName) {
+        List<String> tableList = listTable();
+        for (int i = 0, len = tableList.size(); i < len; i++) {
+            String newTableName = tableName + "_copy" + (i + 1);
+            if (!tableList.contains(newTableName)) {
+                return newTableName;
+            }
         }
-        //是否用0填充
-        if (column.isZerofill()) {
-            sql.append(" ZEROFILL");
-        }
-        //是否自增长
-        if (column.isAutoIncrement()) {
-            sql.append(" AUTO_INCREMENT COMMENT");
-        }
+        return null;
     }
 }
