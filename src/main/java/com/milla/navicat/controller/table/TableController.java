@@ -40,8 +40,8 @@ public class TableController {
     }
 
     //复制表 0:仅表格结构 1：表结构和数据
-    @PostMapping(value = "/{tableName}")
-    public void addTableCopy(@PathVariable String tableName, int category) {
+    @PostMapping(value = "/duplication")
+    public void addTableCopy(String tableName, int category) {
         tableService.addTableCopy(tableName, category);
     }
 
