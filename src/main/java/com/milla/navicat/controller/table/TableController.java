@@ -61,5 +61,10 @@ public class TableController {
         tableService.updateTable(tableName, newName);
     }
 
+    @PutMapping(value = "/{tableName}/{tableComment}")
+    public void updateTableComment(@PathVariable String tableName, @PathVariable String tableComment) {
+        tableService.updateTableComment(tableName, tableComment);
+    }
+
 
 }

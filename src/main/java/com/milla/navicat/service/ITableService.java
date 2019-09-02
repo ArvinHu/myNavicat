@@ -33,4 +33,6 @@ public interface ITableService {
     void removeTableData(String tableName);
 
     void addTableCopy(String tableName, int category);
+
+    void updateTableComment(String tableName, String tableComment);
 }

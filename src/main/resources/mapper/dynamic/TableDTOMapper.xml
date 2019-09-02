@@ -21,6 +21,10 @@
     <update id="alterTableName" parameterType="java.lang.String">
         ALTER TABLE `${tableName}` RENAME TO `${newName}`
     </update>
+    <!--修改表格名称-->
+    <update id="alterTableCommentByName" parameterType="java.lang.String">
+        ALTER TABLE `${tableName}` COMMENT = #{tableComment}
+    </update>
     <!--复制表格[仅结构]-->
     <update id="createTableOnlyStructureByCopy" parameterType="java.lang.String">
         CREATE TABLE `${newTableName}` LIKE `${tableName}`

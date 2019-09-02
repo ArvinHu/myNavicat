@@ -98,6 +98,12 @@ public class TableServiceImpl implements ITableService {
         mapper.createTableByCopy(tableName, newTableName);
     }
 
+    @Override
+    public void updateTableComment(String tableName, String tableComment) {
+        Assert.isTrue(StringUtils.isNotBlank(tableName), "表格名称不能为空");
+        mapper.alterTableCommentByName(tableName, tableComment);
+    }
+
     private String checkedExists(String tableName) {
         List<String> tableList = listTable();
         for (int i = 0, len = tableList.size(); i < len; i++) {
