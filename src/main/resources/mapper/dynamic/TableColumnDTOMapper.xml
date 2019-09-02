@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.milla.navicat.pojo.dto.TableColumnDTO">
         <id column="COLUMN_NAME" jdbcType="VARCHAR" property="columnName"/>
         <result column="COLUMN_DEFAULT" jdbcType="VARCHAR" property="columnDefault"/>
+        <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName"/>
         <result column="IS_NULLABLE" jdbcType="INTEGER" property="isNullable"/>
         <result column="DATA_TYPE" jdbcType="VARCHAR" property="dataType"/>
         <result column="COLUMN_TYPE" jdbcType="VARCHAR" property="columnType"/>
@@ -16,6 +17,7 @@
 
     <select id="selectColumnListByTableName" resultMap="BaseResultMap" parameterType="string">
         SELECT
+            sys.TABLE_NAME,
             sys.COLUMN_NAME,
             sys.COLUMN_DEFAULT,
             sys.IS_NULLABLE,
@@ -32,4 +34,8 @@
         sys.TABLE_SCHEMA = 'tcc_order'
         AND sys.TABLE_NAME = #{tableName}
     </select>
+    <!--删除表中某字段-->
+    <update id="dropTableColumn" parameterType="com.milla.navicat.pojo.vo.TableColumnVO">
+        ALTER TABLE `${tableName}`  DROP COLUMN `${columnName}`
+    </update>
 </mapper>
