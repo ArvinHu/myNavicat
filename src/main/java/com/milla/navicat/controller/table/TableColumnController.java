@@ -36,7 +36,7 @@ public class TableColumnController {
     }
 
     //校验字段的种类长度
-    @PostMapping(value = "")
+    @DeleteMapping(value = "")
     public void removeTableColumn(@RequestBody TableColumnVO column) {
         service.removeTableColumn(column);
     }
