@@ -94,7 +94,11 @@ public class TableColumnServiceImpl implements ITableColumnService {
         Assert.notNull(columnName, "字段名称不能为空");
         Assert.notNull(category, "字段类型不能为空");
         StringBuilder sql = new StringBuilder(" ");
-        sql.append("  `").append(columnName).append("` ").append(category.name());
+        if (column.isPrimaryKey()) {
+            sql.append(String.format(" PRIMARY KEY (`%s`),", columnName));
+
+        }
+        sql.append("`").append(columnName).append("` ").append(category.name());
         numberCategory(sql, category, column);
         boolean isCharacter = characterCategory(sql, category, column);
         //是否为空
@@ -116,6 +120,13 @@ public class TableColumnServiceImpl implements ITableColumnService {
             sql.append(" COMMENT").append(" '").append(column.getColumnComment()).append("'");
         }
         return sql.toString();
+    }
+
+    @Override
+    public void removeTableColumn(TableColumnVO column) {
+        Assert.isTrue(StringUtils.isNotBlank(column.getTableName()), "表格名称不能空");
+        Assert.isTrue(StringUtils.isNotBlank(column.getColumnName()), "字段名称不能空");
+        columnMapper.dropTableColumn(column);
     }
 
     //如果不是字符类型直接返回

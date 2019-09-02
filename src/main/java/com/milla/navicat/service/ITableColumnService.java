@@ -18,4 +18,6 @@ public interface ITableColumnService {
     List<TableColumnVO> listColumnByTableName(String tableName);
 
     String validateTableColumn(TableColumnVO column);
+
+    void removeTableColumn(TableColumnVO column);
 }

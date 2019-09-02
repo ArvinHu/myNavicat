@@ -15,6 +15,8 @@ import com.milla.navicat.pojo.enums.EnumTableColumn;
  */
 public class TableColumnVO {
     //---------------数据库表中的字段-----------------------
+    //字段所属表格名称
+    private String tableName;
     //字段名称
     private String columnName;
     //字段默认值
@@ -48,6 +50,14 @@ public class TableColumnVO {
     //字段类型
     @JSONField(serialize = false)//设置字段不显示
     private EnumTableColumn columnCategory;
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
 
     public String getColumnName() {
         return columnName;
@@ -137,6 +147,14 @@ public class TableColumnVO {
         this.primaryKey = primaryKey;
     }
 
+    public boolean isBinary() {
+        return isBinary;
+    }
+
+    public void setBinary(boolean binary) {
+        isBinary = binary;
+    }
+
     public long getDisplayWidth() {
         return displayWidth;
     }
@@ -159,13 +177,5 @@ public class TableColumnVO {
 
     public void setColumnCategory(EnumTableColumn columnCategory) {
         this.columnCategory = columnCategory;
-    }
-
-    public boolean isBinary() {
-        return isBinary;
-    }
-
-    public void setBinary(boolean binary) {
-        isBinary = binary;
     }
 }

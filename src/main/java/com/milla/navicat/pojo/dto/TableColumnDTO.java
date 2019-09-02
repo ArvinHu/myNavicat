@@ -12,6 +12,8 @@ package com.milla.navicat.pojo.dto;
  */
 public class TableColumnDTO {
     //---------------数据库表中的字段-----------------------
+    //字段所属表格名称
+    private String tableName;
     //字段名称
     private String columnName;
     //字段默认值
@@ -32,6 +34,14 @@ public class TableColumnDTO {
     private String extra;
     //字段注释
     private String columnComment;
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
 
     public String getColumnName() {
         return columnName;

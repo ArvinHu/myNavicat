@@ -1,6 +1,7 @@
 package com.milla.navicat.mapper.dynamic;
 
 import com.milla.navicat.pojo.dto.TableColumnDTO;
+import com.milla.navicat.pojo.vo.TableColumnVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -17,4 +18,6 @@ import java.util.List;
  */
 public interface TableColumnDTOMapper {
     List<TableColumnDTO> selectColumnListByTableName(@Param("tableSchema") String tableSchema, @Param("tableName") String tableName);
+
+    void dropTableColumn(TableColumnVO column);
 }

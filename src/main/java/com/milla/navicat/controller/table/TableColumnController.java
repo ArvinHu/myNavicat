@@ -34,4 +34,11 @@ public class TableColumnController {
     public String validateTableColumn(@RequestBody TableColumnVO column) {
         return service.validateTableColumn(column);
     }
+
+    //校验字段的种类长度
+    @PostMapping(value = "")
+    public void removeTableColumn(@RequestBody TableColumnVO column) {
+        service.removeTableColumn(column);
+    }
+
 }
