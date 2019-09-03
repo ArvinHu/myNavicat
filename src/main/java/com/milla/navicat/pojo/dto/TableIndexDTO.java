@@ -1,10 +1,7 @@
-package com.milla.navicat.pojo.vo;
-
-import com.milla.navicat.pojo.enums.EnumTableIndexCategory;
-import com.milla.navicat.pojo.enums.EnumTableIndexFunction;
+package com.milla.navicat.pojo.dto;
 
 /**
- * @Package: com.milla.navicat.pojo.vo
+ * @Package: com.milla.navicat.pojo.dto
  * @Description: <表索引实体>
  * @Author: MILLA
  * @CreateDate: 2019/8/28 17:32
@@ -13,9 +10,11 @@ import com.milla.navicat.pojo.enums.EnumTableIndexFunction;
  * @UpdateRemark: <>
  * @Version: 1.0
  */
-public class TableIndexVO {
+public class TableIndexDTO {
     //所属表格
     private String table;
+    //是否唯一
+    private boolean nonUnique;
     //索引名称
     private String keyName;
     //字段名称
@@ -24,12 +23,10 @@ public class TableIndexVO {
     private String collation;
     //基数
     private int cardinality;
+    //索引方法
+    private String indexType;
     //索引注释
     private String indexComment;
-    //索引方法
-    private EnumTableIndexFunction indexFunction;
-    //索引种类
-    private EnumTableIndexCategory indexCategory;
 
     public String getTable() {
         return table;
@@ -37,6 +34,14 @@ public class TableIndexVO {
 
     public void setTable(String table) {
         this.table = table;
+    }
+
+    public boolean isNonUnique() {
+        return nonUnique;
+    }
+
+    public void setNonUnique(boolean nonUnique) {
+        this.nonUnique = nonUnique;
     }
 
     public String getKeyName() {
@@ -71,6 +76,14 @@ public class TableIndexVO {
         this.cardinality = cardinality;
     }
 
+    public String getIndexType() {
+        return indexType;
+    }
+
+    public void setIndexType(String indexType) {
+        this.indexType = indexType;
+    }
+
     public String getIndexComment() {
         return indexComment;
     }
@@ -79,19 +92,4 @@ public class TableIndexVO {
         this.indexComment = indexComment;
     }
 
-    public EnumTableIndexFunction getIndexFunction() {
-        return indexFunction;
-    }
-
-    public void setIndexFunction(EnumTableIndexFunction indexFunction) {
-        this.indexFunction = indexFunction;
-    }
-
-    public EnumTableIndexCategory getIndexCategory() {
-        return indexCategory;
-    }
-
-    public void setIndexCategory(EnumTableIndexCategory indexCategory) {
-        this.indexCategory = indexCategory;
-    }
 }

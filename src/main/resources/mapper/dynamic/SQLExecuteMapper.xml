@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.milla.navicat.mapper.dynamic.SQLExecuteMapper">
+    <!--执行单纯sql的更新操作-->
+    <update id="updateBySQL" parameterType="java.lang.String">
+      ${sql}
+    </update>
+    <!--执行单纯sql的查询操作-->
+    <select id="selectBySQL" resultType="map" parameterType="java.lang.String">
+      ${sql}
+    </select>
+    <!--查询列表-->
+    <select id="selectListBySQL" resultType="map">
+      ${sql}
+    </select>
+</mapper>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.milla.navicat.mapper.dynamic.TableForeignKeyDTOMapper">
+    <resultMap id="BaseResultMap" type="com.milla.navicat.pojo.dto.TableForeignKeyDTO">
+        <id column="CONSTRAINT_NAME" jdbcType="VARCHAR" property="constraintName"/>
+        <result column="CONSTRAINT_CATALOG" jdbcType="TINYINT" property="constraintCatalog"/>
+        <result column="CONSTRAINT_SCHEMA" jdbcType="VARCHAR" property="constraintSchema"/>
+        <result column="TABLE_CATALOG" jdbcType="VARCHAR" property="tableCatalog"/>
+        <result column="TABLE_SCHEMA" jdbcType="VARCHAR" property="tableSchema"/>
+        <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName"/>
+        <result column="COLUMN_NAME" jdbcType="VARCHAR" property="columnName"/>
+        <result column="ORDINAL_POSITION" jdbcType="VARCHAR" property="ordinalPosition"/>
+        <result column="POSITION_IN_UNIQUE_CONSTRAINT" jdbcType="VARCHAR" property="positionInUniqueConstraint"/>
+        <result column="REFERENCED_TABLE_SCHEMA" jdbcType="VARCHAR" property="referencedTableSchema"/>
+        <result column="REFERENCED_COLUMN_NAME" jdbcType="VARCHAR" property="referencedTableName"/>
+        <result column="REFERENCED_COLUMN_NAME" jdbcType="VARCHAR" property="referencedColumnName"/>
+        <result column="UPDATE_RULE" jdbcType="VARCHAR" property="updateRule"
+                typeHandler="com.milla.navicat.handler.TableForeignKeyRuleHandler"/>
+        <result column="DELETE_RULE" jdbcType="VARCHAR" property="deleteRule"
+                typeHandler="com.milla.navicat.handler.TableForeignKeyRuleHandler"/>
+        <result column="UNIQUE_CONSTRAINT_CATALOG" jdbcType="VARCHAR" property="uniqueConstraintCatalog"/>
+        <result column="UNIQUE_CONSTRAINT_SCHEMA" jdbcType="VARCHAR" property="uniqueConstraintSchema"/>
+        <result column="UNIQUE_CONSTRAINT_NAME" jdbcType="VARCHAR" property="uniqueConstraintName"/>
+        <result column="MATCH_OPTION" jdbcType="VARCHAR" property="matchOption"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        k.CONSTRAINT_NAME,k.CONSTRAINT_CATALOG,k.CONSTRAINT_SCHEMA,k.TABLE_CATALOG,k.TABLE_SCHEMA,k.TABLE_NAME,k.COLUMN_NAME,
+        k.ORDINAL_POSITION,k.POSITION_IN_UNIQUE_CONSTRAINT,k.REFERENCED_TABLE_SCHEMA,k.REFERENCED_COLUMN_NAME,k.REFERENCED_COLUMN_NAME,
+        c.UPDATE_RULE,c.DELETE_RULE,c.UNIQUE_CONSTRAINT_CATALOG,c.UNIQUE_CONSTRAINT_SCHEMA,c.UNIQUE_CONSTRAINT_NAME,c.MATCH_OPTION
+</sql>
+    <!--查询一个表格的所有外键不包含主键-->
+    <select id="selectForeignKeyListByTableName" resultMap="BaseResultMap" parameterType="string">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        INFORMATION_SCHEMA.KEY_COLUMN_USAGE k
+        INNER JOIN INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS c ON k.CONSTRAINT_NAME = c.CONSTRAINT_NAME AND
+        k.TABLE_SCHEMA = c.CONSTRAINT_SCHEMA
+        WHERE
+        k.TABLE_SCHEMA = #{tableSchema}
+        AND k.TABLE_NAME = #{tableName}
+    </select>
+    <!--根据索引名称删除索引-->
+    <update id="alterTableIndex" parameterType="com.milla.navicat.pojo.vo.TableIndexVO">
+      ALTER TABLE `${table}` DROP INDEX `${keyName}`
+    </update>
+</mapper>

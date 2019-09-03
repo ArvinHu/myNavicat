@@ -44,9 +44,7 @@ public class DatabaseCategoryHandler extends BaseTypeHandler<DatabaseCategory> {
     }
 
     private DatabaseCategory category(String category) {
-        Class<DatabaseCategory> sexClass = DatabaseCategory.class;
-        DatabaseCategory[] categoryList = sexClass.getEnumConstants();
-
+        DatabaseCategory[] categoryList = DatabaseCategory.values();
         for (DatabaseCategory databaseCategory : categoryList) {
             if (databaseCategory.getCategory().equals(category)) {
                 return databaseCategory;

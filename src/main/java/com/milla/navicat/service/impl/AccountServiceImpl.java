@@ -37,9 +37,9 @@ public class AccountServiceImpl implements IAccountService {
     @Override
     public String login(AccountVO account) {
         //1.校验帐号不能为空
-        Assert.notNull(account.getAccount(), "账户不能为空");
+        Assert.hasText(account.getAccount(), "账户不能为空");
         //2.校验密码不能为空
-        Assert.notNull(account.getPassword(), "密码不能为空");
+        Assert.hasText(account.getPassword(), "密码不能为空");
         //3.按照输入的帐号去查询帐号信息
         AccountDTO accountDTO = mapper.selectByPrimaryKey(account.getAccount());
         //4.校验帐号信息是否存在
@@ -50,7 +50,7 @@ public class AccountServiceImpl implements IAccountService {
         if (!StringUtils.equals(account.getPassword(), accountDTO.getPassword())) {
             throw new CustomMessageException("用户密码错误");
         }
-        //6：生成token(令牌)
+        //6：生成token(令牌)q
         String key = MD5Util.md5Sorted(account.getAccount() + account.getPassword() + System.nanoTime());
         DefaultClaims info = new DefaultClaims();
         info.put(C_CURRENT_ACCOUNT, account);

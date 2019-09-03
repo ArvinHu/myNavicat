@@ -1,5 +1,6 @@
 package com.milla.navicat.mapper.dynamic;
 
+import com.milla.navicat.pojo.dto.TableIndexDTO;
 import com.milla.navicat.pojo.vo.TableIndexVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,5 +17,7 @@ import java.util.List;
  * @Version: 1.0
  */
 public interface TableIndexDTOMapper {
-    List<TableIndexVO> selectIndexListByTableName(@Param("tableName") String tableName);
+    List<TableIndexDTO> selectIndexListByTableName(@Param("tableName") String tableName);
+
+    void alterTableIndex(TableIndexVO column);
 }

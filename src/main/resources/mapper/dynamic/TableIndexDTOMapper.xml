@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.milla.navicat.mapper.dynamic.TableIndexDTOMapper">
-    <resultMap id="BaseResultMap" type="com.milla.navicat.pojo.vo.TableIndexVO">
-        <id column="columnName" jdbcType="VARCHAR" property="columnName"/>
+    <resultMap id="BaseResultMap" type="com.milla.navicat.pojo.dto.TableIndexDTO">
+        <id column="Column_name" jdbcType="VARCHAR" property="columnName"/>
         <result column="table" jdbcType="VARCHAR" property="table"/>
         <result column="Non_unique" jdbcType="TINYINT" property="nonUnique"/>
         <result column="Key_name" jdbcType="VARCHAR" property="keyName"/>
@@ -11,8 +11,12 @@
         <result column="Index_type" jdbcType="VARCHAR" property="indexType"/>
         <result column="Index_comment" jdbcType="VARCHAR" property="indexComment"/>
     </resultMap>
-
+    <!--查询一个表格的所有索引不包含主键-->
     <select id="selectIndexListByTableName" resultMap="BaseResultMap" parameterType="string">
-       SHOW INDEX FROM `${tableName}`
+       SHOW INDEX FROM `${tableName}`  WHERE key_name !='PRIMARY'
     </select>
+    <!--根据索引名称删除索引-->
+    <update id="alterTableIndex" parameterType="com.milla.navicat.pojo.vo.TableIndexVO">
+      ALTER TABLE `${table}` DROP INDEX `${keyName}`
+    </update>
 </mapper>

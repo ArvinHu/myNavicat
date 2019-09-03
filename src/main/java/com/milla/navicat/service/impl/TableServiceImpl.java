@@ -1,5 +1,6 @@
 package com.milla.navicat.service.impl;
 
+import com.milla.navicat.mapper.dynamic.SQLExecuteMapper;
 import com.milla.navicat.mapper.dynamic.TableDTOMapper;
 import com.milla.navicat.pojo.vo.TableColumnVO;
 import com.milla.navicat.pojo.vo.TableVO;
@@ -26,6 +27,8 @@ import java.util.List;
 public class TableServiceImpl implements ITableService {
     @Autowired
     private TableDTOMapper mapper;
+    @Autowired
+    private SQLExecuteMapper executeMapper;
 
     @Override
     public List<String> listTable() {
@@ -38,7 +41,7 @@ public class TableServiceImpl implements ITableService {
 
     @Override
     public void addTable(TableVO table) {
-        Assert.notNull(table.getTableName(), "表格名称不能为空");
+        Assert.hasText(table.getTableName(), "表格名称不能为空");
         Assert.notEmpty(table.getColumns(), "表格字段不能为空");
         StringBuilder sql = new StringBuilder("CREATE TABLE `" + table.getTableName() + "`  (\n");
         List<TableColumnVO> columns = table.getColumns();
@@ -63,19 +66,20 @@ public class TableServiceImpl implements ITableService {
 
     @Override
     public void addTable(String sql) {
-        mapper.createTable(sql);
+        Assert.hasText(sql, "SQL不能为空");
+        executeMapper.updateBySQL(sql);
     }
 
     @Override
     public void removeTable(String tableName) {
-        Assert.isTrue(StringUtils.isNotBlank(tableName), "表格名称不能为空");
+        Assert.hasText(tableName, "表格名称不能为空");
         mapper.dropTable(tableName);
     }
 
     @Override
     public void updateTable(String tableName, String newName) {
-        Assert.isTrue(StringUtils.isNotBlank(tableName), "表格名称不能为空");
-        Assert.isTrue(StringUtils.isNotBlank(newName), "表格新名称不能为空");
+        Assert.hasText(tableName, "表格名称不能为空");
+        Assert.hasText(newName, "表格新名称不能为空");
         List<String> tableList = listTable();
         Assert.isTrue(tableList == null || !tableList.contains(newName), String.format("表名'%s'已存在", newName));
         mapper.alterTableName(tableName, newName);
@@ -83,13 +87,13 @@ public class TableServiceImpl implements ITableService {
 
     @Override
     public void removeTableData(String tableName) {
-        Assert.isTrue(StringUtils.isNotBlank(tableName), "表格名称不能为空");
+        Assert.hasText(tableName, "表格名称不能为空");
         mapper.deleteTableData(tableName);
     }
 
     @Override
     public void addTableCopy(String tableName, int category) {
-        Assert.isTrue(StringUtils.isNotBlank(tableName), "表格名称不能为空");
+        Assert.hasText(tableName, "表格名称不能为空");
         String newTableName = checkedExists(tableName);
         mapper.createTableOnlyStructureByCopy(tableName, newTableName);
         if (category == 0) {
@@ -100,7 +104,7 @@ public class TableServiceImpl implements ITableService {
 
     @Override
     public void updateTableComment(String tableName, String tableComment) {
-        Assert.isTrue(StringUtils.isNotBlank(tableName), "表格名称不能为空");
+        Assert.hasText(tableName, "表格名称不能为空");
         mapper.alterTableCommentByName(tableName, tableComment);
     }
 

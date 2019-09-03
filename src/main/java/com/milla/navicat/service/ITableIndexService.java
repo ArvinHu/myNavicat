@@ -16,4 +16,8 @@ import java.util.List;
  */
 public interface ITableIndexService {
     List<TableIndexVO> listIndexByTableName(String tableName);
+
+    String validateTableIndex(TableIndexVO column);
+
+    void removeTableIndex(TableIndexVO column);
 }

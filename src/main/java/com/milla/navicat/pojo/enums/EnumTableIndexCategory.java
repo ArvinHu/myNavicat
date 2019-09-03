@@ -10,6 +10,6 @@ package com.milla.navicat.pojo.enums;
  * @UpdateRemark: <>
  * @Version: 1.0
  */
-public enum EnumTableIndex {
+public enum EnumTableIndexCategory {
     FULLTEXT, NORMAL, SPATIAL, UNIQUE;
 }

@@ -1,14 +1,10 @@
 package com.milla.navicat.controller;
 
-import com.milla.navicat.exception.CustomMessageException;
 import com.milla.navicat.pojo.vo.AccountVO;
 import com.milla.navicat.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Package: com.milla.navicat.controller
@@ -28,7 +24,8 @@ public class AccountController {
     IAccountService service;
 
     @PostMapping(value = "/login")
-    public String login(AccountVO account) {
+    @CrossOrigin(origins = "*")
+    public String login(@RequestBody AccountVO account) {
         return service.login(account);
     }
 }
