@@ -18,7 +18,5 @@ import java.util.Map;
 public interface SQLExecuteMapper {
     void updateBySQL(@Param("sql") String sql);
 
-    Map<Object, Object> selectBySQL(@Param("sql") String sql);
-
-    List<Map<Object, Object>> selectListBySQL(@Param("sql") String sql);
+    List<Map<Object, Object>> selectObjectListBySQL(@Param("sql") String sql);
 }

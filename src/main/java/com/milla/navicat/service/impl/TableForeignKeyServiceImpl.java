@@ -55,10 +55,4 @@ public class TableForeignKeyServiceImpl implements ITableForeignKeyService {
         }
         return sb.toString();
     }
-
-    @Override
-    public void updateTableForeignKey(String sql) {
-        Assert.hasText(sql, "SQL不能为空");
-        executeMapper.updateBySQL(sql);
-    }
 }

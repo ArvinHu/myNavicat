@@ -5,12 +5,8 @@
     <update id="updateBySQL" parameterType="java.lang.String">
       ${sql}
     </update>
-    <!--执行单纯sql的查询操作-->
-    <select id="selectBySQL" resultType="map" parameterType="java.lang.String">
-      ${sql}
-    </select>
     <!--查询列表-->
-    <select id="selectListBySQL" resultType="map">
+    <select id="selectObjectListBySQL" resultType="map">
       ${sql}
     </select>
 </mapper>

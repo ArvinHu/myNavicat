@@ -20,6 +20,4 @@ public interface ITableColumnService {
     String validateTableColumn(TableColumnVO column);
 
     void removeTableColumn(TableColumnVO column);
-
-    void updateTableColumn(String sql);
 }

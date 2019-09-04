@@ -33,15 +33,4 @@ public class TableForeignKeyController {
     public String validateTableForeignKey(@RequestBody TableForeignKeyDTO dto) {
         return service.validateTableForeignKey(dto);
     }
-
-    @PutMapping(value = "/")
-    public void updateTableForeignKey(@RequestBody String sql) {
-        service.updateTableForeignKey(sql);
-    }
-
-    @DeleteMapping(value = "/")
-    public void removeTableForeignKey(@RequestBody String sql) {
-        service.updateTableForeignKey(sql);
-    }
-
 }

@@ -1,6 +1,7 @@
 package com.milla.navicat.service.impl;
 
 import com.google.common.collect.Lists;
+import com.milla.navicat.mapper.dynamic.SQLExecuteMapper;
 import com.milla.navicat.mapper.dynamic.TableIndexDTOMapper;
 import com.milla.navicat.pojo.dto.TableIndexDTO;
 import com.milla.navicat.pojo.enums.EnumTableIndexCategory;
@@ -29,8 +30,12 @@ import java.util.Optional;
  */
 @Service
 public class TableIndexServiceImpl implements ITableIndexService {
+
     @Autowired
     private TableIndexDTOMapper mapper;
+
+    @Autowired
+    private SQLExecuteMapper executeMapper;
 
     @Override
     public List<TableIndexVO> listIndexByTableName(String tableName) {

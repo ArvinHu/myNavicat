@@ -34,11 +34,6 @@ public class TableController {
         tableService.addTable(table);
     }
 
-    @PostMapping(value = "/sql")
-    public void addTable(@RequestBody String sql) {
-        tableService.addTable(sql);
-    }
-
     //复制表 0:仅表格结构 1：表结构和数据
     @PostMapping(value = "/duplication")
     public void addTableCopy(String tableName, int category) {

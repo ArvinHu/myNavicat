@@ -1,6 +1,7 @@
 package com.milla.navicat.service.impl;
 
 import com.google.common.collect.Lists;
+import com.milla.navicat.mapper.dynamic.SQLExecuteMapper;
 import com.milla.navicat.mapper.dynamic.TableColumnDTOMapper;
 import com.milla.navicat.pojo.dto.TableColumnDTO;
 import com.milla.navicat.pojo.enums.EnumTableColumn;
@@ -33,6 +34,9 @@ import static com.milla.navicat.constant.ValueConstant.V_YES_STRING;
 public class TableColumnServiceImpl implements ITableColumnService {
     @Autowired
     private TableColumnDTOMapper columnMapper;
+    @Autowired
+    private SQLExecuteMapper executeMapper;
+
 
     @Override
     public List<TableColumnVO> listColumnByTableName(String tableName) {

@@ -35,12 +35,6 @@ public class TableColumnController {
         return service.validateTableColumn(column);
     }
 
-    //修改列内容[此时不再校验sql的准确性]
-    @PutMapping(value = "")
-    public void updateTableColumn(@RequestBody String sql) {
-        service.updateTableColumn(sql);
-    }
-
     //校验字段的种类长度
     @DeleteMapping(value = "")
     public void removeTableColumn(@RequestBody TableColumnVO column) {

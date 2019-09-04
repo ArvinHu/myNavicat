@@ -35,11 +35,6 @@ public class TableIndexController {
         return service.validateTableIndex(column);
     }
 
-    @PostMapping(value = "")
-    public void updateTableIndex(@RequestBody String sql) {
-        service.updateTableIndex(sql);
-    }
-
     //校验并生成创建索引的sql
     @DeleteMapping(value = "")
     public void removeTableIndex(@RequestBody TableIndexVO column) {

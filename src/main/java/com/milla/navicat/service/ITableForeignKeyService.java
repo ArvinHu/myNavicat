@@ -19,5 +19,4 @@ public interface ITableForeignKeyService {
 
     String validateTableForeignKey(TableForeignKeyDTO dto);
 
-    void updateTableForeignKey(String sql);
 }
