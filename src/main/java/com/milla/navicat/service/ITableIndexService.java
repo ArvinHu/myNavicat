@@ -20,4 +20,6 @@ public interface ITableIndexService {
     String validateTableIndex(TableIndexVO column);
 
     void removeTableIndex(TableIndexVO column);
+
+    void updateTableIndex(String sql);
 }
