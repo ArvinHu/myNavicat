@@ -11,9 +11,12 @@ import com.milla.navicat.util.token.JwtTokenProvider;
 import com.milla.navicat.util.token.MD5Util;
 import io.jsonwebtoken.impl.DefaultClaims;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import java.util.Date;
 
 import static com.milla.navicat.constant.Constant.C_CURRENT_ACCOUNT;
 import static com.milla.navicat.constant.HeaderParamConstant.C_TOKEN;
@@ -60,8 +63,9 @@ public class AccountServiceImpl implements IAccountService {
         tokenInfo.setAccount(account.getAccount());
         tokenInfo.setToken(token);
         tokenInfo.setTokenKey(key);
-        tokenInfo.setExpiration(10000L);
+        tokenInfo.setExpiration(DateUtils.addDays(new Date(), 30).getTime());
         WebUtil.getSession().setAttribute(C_TOKEN, tokenInfo);
+        System.out.println(WebUtil.currentAccount() + "////////" + WebUtil.getSession().getId());
         return token;
     }
 

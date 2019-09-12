@@ -1,6 +1,5 @@
 package com.milla.navicat.controller;
 
-import com.milla.navicat.config.datasource.dynamic.DataSourceVO;
 import com.milla.navicat.pojo.vo.DatabaseVO;
 import com.milla.navicat.service.IDatabaseService;
 import com.milla.navicat.service.IShowService;
@@ -39,23 +38,24 @@ public class DatabaseController {
         return showService.getDatabaseByDatabaseName(connId, databaseName);
     }
 
-    @PostMapping(value = "/")
+    @PostMapping(value = "")
     public int addDatabase(@RequestBody @Validated DatabaseVO database) {
         return databaseService.addDatabase(database);
     }
 
-    @PutMapping(value = "/")
-    public int updateDatabase(@RequestBody @Validated DatabaseVO database) {
+    @PutMapping(value = "/{connId}")
+    public int updateDatabase(@PathVariable Integer connId, @RequestBody @Validated DatabaseVO database) {
+        database.setConnId(connId);
         return databaseService.updateDatabase(database);
     }
 
-    @DeleteMapping(value = "/")
+    @DeleteMapping(value = "")
     public int removeDatabase(@RequestBody @Validated DatabaseVO database) {
         return databaseService.removeDatabase(database);
     }
 
-    @PutMapping(value = "/{datasourceId}")
-    public void changeDatabase(@PathVariable String datasourceId) {
-        databaseService.changeDatabase(datasourceId);
+    @PutMapping(value = "")
+    public void changeDatabase(@RequestBody DatabaseVO database) {
+        databaseService.changeDatabase(database.getConnId(), database.getDatabaseName());
     }
 }

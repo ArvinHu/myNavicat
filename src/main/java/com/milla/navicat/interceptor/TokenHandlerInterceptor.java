@@ -5,6 +5,8 @@ import com.milla.navicat.exception.AccountException;
 import com.milla.navicat.pojo.vo.TokenVO;
 import com.milla.navicat.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -15,10 +17,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
 
-import static com.milla.navicat.constant.HeaderParamConstant.C_TABLE_SCHEMA;
-import static com.milla.navicat.constant.HeaderParamConstant.C_TOKEN;
 import static com.milla.navicat.constant.Constant.EX_NO_TOKEN_EXCEPTION;
-import static com.milla.navicat.constant.HeaderParamConstant.C_DATASOURCE_ID;
+import static com.milla.navicat.constant.HeaderParamConstant.*;
 
 /**
  * @Package: com.milla.navicat.interceptor
@@ -30,7 +30,7 @@ import static com.milla.navicat.constant.HeaderParamConstant.C_DATASOURCE_ID;
  * @UpdateRemark: <>
  * @Version: 1.0
  */
-//@Component
+@Component
 @Slf4j
 public class TokenHandlerInterceptor implements HandlerInterceptor {
     private static final long SETTINGS_DATE_LINE_DAYS = 30;
@@ -39,7 +39,14 @@ public class TokenHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+        String method = request.getMethod();
+        if (StringUtils.equalsIgnoreCase("OPTIONS", method)) {
+            //不做任何处理
+            return true;
+        }
         String tokenClient = request.getHeader(C_TOKEN);
+        log.info("sssSessionId:{}", request.getSession().getId());
+        log.info("webSessionId:{}", WebUtil.getSession().getId());
         TokenVO tokenServer = (TokenVO) request.getSession().getAttribute(C_TOKEN);
         //客户端token和服务端token一致且没有过期时放行
         if (Objects.nonNull(tokenServer) && Objects.nonNull(tokenServer.getToken()) && tokenServer.getToken().length() > 0 && tokenServer.getToken().equals(tokenClient)) {
@@ -81,5 +88,6 @@ public class TokenHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        DBContextHolder.clearDataSource();
     }
 }

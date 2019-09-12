@@ -38,5 +38,5 @@ public interface IDatabaseService {
      */
     int removeDatabase(DatabaseVO database);
 
-    void changeDatabase(String datasourceId);
+    void changeDatabase(Integer connId, String databaseName);
 }

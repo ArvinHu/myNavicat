@@ -9,17 +9,19 @@ import com.milla.navicat.pojo.vo.DatabaseVO;
 import com.milla.navicat.service.IDatabaseConnectionService;
 import com.milla.navicat.service.IDatabaseService;
 import com.milla.navicat.service.IShowService;
+import com.milla.navicat.util.WebUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.List;
 
-import static com.milla.navicat.constant.SymbolConstant.S_STRIKE_THROUGH;
+import static com.milla.navicat.constant.HeaderParamConstant.C_TABLE_SCHEMA;
 
 /**
  * @Package: com.milla.navicat.service.impl
@@ -46,15 +48,14 @@ public class DatabaseServiceImpl implements IDatabaseService {
     private DynamicDataSource dynamicDataSource;
 
     @Override
-    public void changeDatabase(String datasourceId) {
-        if (StringUtils.isBlank(datasourceId) || !datasourceId.contains(S_STRIKE_THROUGH)) {
-            throw new DataSourceException("数据源不存在");
-        }
-        int connId = Integer.parseInt(datasourceId.substring(datasourceId.lastIndexOf(S_STRIKE_THROUGH) + 1));
+    public void changeDatabase(Integer connId, String databaseName) {
+        Assert.hasText(databaseName, "数据库名称不能为空");
+        DBContextHolder.clearDataSource();
         DatabaseConnectionDTO connection = connectionService.getConnectionByConnId(connId);
+        connection.setDatabaseDatabase(databaseName);
         DataSourceVO dataSource = connectionService.getDataSourceVO(connection);
         dynamicDataSource.createDataSourceWithCheck(dataSource);
-        DBContextHolder.changeDataSource(datasourceId);
+        DBContextHolder.changeDataSource(dataSource.getDatasourceId());
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.milla.navicat.config;
 import com.milla.navicat.interceptor.TokenHandlerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -18,14 +19,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class WebAppConfigurer implements WebMvcConfigurer {
-    //    @Autowired
+    @Autowired
     private TokenHandlerInterceptor interceptor;
 
     //配置拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addInterceptor(interceptor).addPathPatterns("/**");
-//        registry.addInterceptor(interceptor).addPathPatterns("/**").excludePathPatterns("/account/login", "/account/no-token", "/webjars/**", "swagger-ui.html");
+        registry.addInterceptor(interceptor).addPathPatterns("/**").excludePathPatterns("/account/login", "/webjars/**", "swagger-ui.html");
     }
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowCredentials(true)
+                .allowedHeaders("*")
+                .allowedMethods("*");
+    }
 }

@@ -25,7 +25,7 @@ public class DatabaseConnectionController {
     @Autowired
     private IDatabaseConnectionService service;
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "")
     public List<DatabaseConnectionDTO> listConnection() {
         return service.listConnection();
     }
@@ -40,7 +40,7 @@ public class DatabaseConnectionController {
         return service.testConnection(connId);
     }
 
-    @PostMapping(value = "/")
+    @PostMapping(value = "")
     public void addConnection(@RequestBody @Validated DatabaseConnectionDTO conn) {
         service.addConnection(conn);
     }

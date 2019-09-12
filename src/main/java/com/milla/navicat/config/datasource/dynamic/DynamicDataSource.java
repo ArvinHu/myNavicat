@@ -50,7 +50,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
                     try {
                         throw new DataSourceException("不存在的数据源：" + datasourceId);
                     } catch (DataSourceException e) {
-                        e.printStackTrace();
+                        log.debug("当前数据源不存在:{}", datasourceId);
                     }
                 }
             } else {

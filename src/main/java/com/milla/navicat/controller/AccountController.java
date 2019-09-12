@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * @Package: com.milla.navicat.controller
  * @Description: <显示数据库、表、视图>
@@ -24,8 +26,8 @@ public class AccountController {
     IAccountService service;
 
     @PostMapping(value = "/login")
-    @CrossOrigin(origins = "*")
-    public String login(@RequestBody AccountVO account) {
+    public String login(@RequestBody AccountVO account, HttpSession session) {
+        System.out.println("sessionId: " + session.getId());
         return service.login(account);
     }
 }
