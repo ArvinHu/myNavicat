@@ -2,16 +2,11 @@ package com.milla.navicat.config.datasource.dynamic;
 
 import com.github.pagehelper.PageInterceptor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import javax.sql.DataSource;
@@ -75,7 +70,7 @@ public class HikariDataDBConfig {
     }
 
     @Bean
-    public PageInterceptor pageHelper() {
+    public PageInterceptor pageHelper() {//配置分页插件
         PageInterceptor pageInterceptor = new PageInterceptor();
         Properties properties = new Properties();
         properties.setProperty("offsetAsPageNum", "true");
@@ -85,24 +80,4 @@ public class HikariDataDBConfig {
         pageInterceptor.setProperties(properties);
         return pageInterceptor;
     }
-
-//    @Bean
-//    public SqlSessionFactory sqlSessionFactory(PageInterceptor pageHelper, @Qualifier("defaultDataSource") DataSource dataSource) throws Exception {
-//        SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
-//        sqlSessionFactory.setDataSource(dataSource);
-//        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-//        sqlSessionFactory.setMapperLocations(resolver.getResources("classpath:mapper/**/*.xml"));
-//        sqlSessionFactory.setPlugins(new Interceptor[]{pageHelper});
-//        sqlSessionFactory.setTypeAliasesPackage("com.milla.navicat.mapper");
-//        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
-//        //configuration.setMapUnderscoreToCamelCase(true);
-//        configuration.setCallSettersOnNulls(true);
-//        //全局字段配置
-////        Properties properties = new Properties();
-//        //数据库实例名称
-////        properties.setProperty("tableSchema", tableSchema);
-////        configuration.setVariables(properties);
-//        sqlSessionFactory.setConfiguration(configuration);
-//        return sqlSessionFactory.getObject();
-//    }
 }

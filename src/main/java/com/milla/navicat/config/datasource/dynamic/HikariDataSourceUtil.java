@@ -42,7 +42,7 @@ public final class HikariDataSourceUtil {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setPoolName(poolName);
         dataSource.setDriverClassName(driverClassName);
-        dataSource.setJdbcUrl(jdbcUrl);
+        dataSource.setJdbcUrl(jdbcUrl + "?characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=UTC");
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         //各参数配置

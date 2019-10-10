@@ -1,8 +1,10 @@
 package com.milla.navicat.service;
 
+import com.milla.navicat.comm.Query;
 import com.milla.navicat.pojo.vo.TableVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Package: com.milla.navicat.service
@@ -35,4 +37,13 @@ public interface ITableService {
     void addTableCopy(String tableName, int category);
 
     void updateTableComment(String tableName, String tableComment);
+
+    /**
+     * 查询表中的所有数据
+     *
+     * @param tableName
+     * @param query
+     * @return
+     */
+    Map<String, Object> listTableData(String tableName, Query query);
 }

@@ -1,5 +1,6 @@
 package com.milla.navicat.controller.table;
 
+import com.milla.navicat.comm.Query;
 import com.milla.navicat.pojo.vo.TableVO;
 import com.milla.navicat.service.ITableService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Package: com.milla.navicat.controller.table
@@ -27,6 +29,11 @@ public class TableController {
     @GetMapping(value = "/")
     public List<String> listTable() {
         return tableService.listTable();
+    }
+
+    @GetMapping(value = "/{tableName}/data")
+    public Map<String, Object> listTableData(@PathVariable String tableName, Query query) {
+        return tableService.listTableData(tableName, query);
     }
 
     @PostMapping(value = "/")

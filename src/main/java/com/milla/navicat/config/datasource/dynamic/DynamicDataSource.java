@@ -123,7 +123,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     public boolean testDatasource(String driveClass, String url, String username, String password) {
         try {
             Class.forName(driveClass);
-            DriverManager.getConnection(url, username, password);
+            DriverManager.getConnection(url + "?characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=UTC", username, password);
             return true;
         } catch (Exception e) {
             return false;

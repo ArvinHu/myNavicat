@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.binding.BindingException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 
 /**
  * @Package: com.milla.navicat.exception
@@ -40,13 +43,25 @@ public class RestfulExceptionHandler {
 
     private ResponseData<String> responseData(String code, String message, Exception e) {
         log.error("异常代码:{},异常描述:{},异常堆栈:", code, message, e);
-        return ResponseData.error(code, message);
+        return ResponseData.error(code, e.getCause().getMessage());
     }
 
     //运行时异常
     @ExceptionHandler(Exception.class)
     public ResponseData runtimeExceptionHandler(Exception e) {
         return responseData(Constant.EX_RUN_TIME_EXCEPTION, e);
+    }
+
+    //处理SQLSyntaxErrorException
+    @ExceptionHandler(SQLException.class)
+    public ResponseData<String> sqlException(SQLException e) {
+        return responseData(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage(), e);
+    }
+
+    //处理BadSqlGrammarException
+    @ExceptionHandler(BadSqlGrammarException.class)
+    public ResponseData<String> badSqlGrammarException(BadSqlGrammarException e) {
+        return responseData(Constant.EX_RUN_TIME_EXCEPTION, e.getMessage(), e);
     }
 
     //处理CustomerMessageException

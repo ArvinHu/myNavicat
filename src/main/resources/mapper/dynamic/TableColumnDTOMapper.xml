@@ -31,7 +31,7 @@
                 FROM
         information_schema.`COLUMNS` sys
                 WHERE
-        sys.TABLE_SCHEMA = 'tcc_order'
+        sys.TABLE_SCHEMA = #{tableSchema}
         AND sys.TABLE_NAME = #{tableName}
     </select>
     <!--删除表中某字段-->

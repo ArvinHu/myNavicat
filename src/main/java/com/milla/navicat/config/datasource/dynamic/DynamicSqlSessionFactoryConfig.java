@@ -3,22 +3,13 @@ package com.milla.navicat.config.datasource.dynamic;
 import com.github.pagehelper.PageInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-
-import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * @Package: com.milla.navicat.config.datasource.dynamic
@@ -41,7 +32,7 @@ public class DynamicSqlSessionFactoryConfig {
         sqlSessionFactory.setDataSource(dataSource);
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         sqlSessionFactory.setMapperLocations(resolver.getResources("classpath:mapper/**/*.xml"));
-        sqlSessionFactory.setPlugins(new Interceptor[]{pageHelper});
+        sqlSessionFactory.setPlugins(new Interceptor[]{pageHelper});//分页插件
         sqlSessionFactory.setTypeAliasesPackage("com.milla.navicat.mapper.dynamic");
         org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
         //configuration.setMapUnderscoreToCamelCase(true);

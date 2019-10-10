@@ -33,4 +33,8 @@
     <insert id="createTableByCopy" parameterType="java.lang.String">
         INSERT INTO `${newTableName}` SELECT * FROM `${tableName}`
     </insert>
+    <!--查询表中的所有数据[分页]-->
+    <select id="selectTableDataList" resultType="map" parameterType="string">
+      SELECT ${columnNameList} FROM `${tableName}`
+    </select>
 </mapper>

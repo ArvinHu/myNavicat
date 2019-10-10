@@ -1,17 +1,27 @@
 package com.milla.navicat.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.google.common.collect.Maps;
+import com.milla.navicat.comm.PageUtil;
+import com.milla.navicat.comm.Query;
 import com.milla.navicat.mapper.dynamic.SQLExecuteMapper;
 import com.milla.navicat.mapper.dynamic.TableDTOMapper;
 import com.milla.navicat.pojo.vo.TableColumnVO;
 import com.milla.navicat.pojo.vo.TableVO;
 import com.milla.navicat.service.ITableColumnService;
 import com.milla.navicat.service.ITableService;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Package: com.milla.navicat.service.impl
@@ -25,19 +35,21 @@ import java.util.List;
  */
 @Service
 public class TableServiceImpl implements ITableService {
+
     @Autowired
     private TableDTOMapper mapper;
+
     @Autowired
     private SQLExecuteMapper executeMapper;
+
+    @Autowired
+    private ITableColumnService service;
 
     @Override
     public List<String> listTable() {
         //使用show命令的时候是有序的
         return mapper.selectTableList();
     }
-
-    @Autowired
-    private ITableColumnService service;
 
     @Override
     public void addTable(TableVO table) {
@@ -106,6 +118,24 @@ public class TableServiceImpl implements ITableService {
     public void updateTableComment(String tableName, String tableComment) {
         Assert.hasText(tableName, "表格名称不能为空");
         mapper.alterTableCommentByName(tableName, tableComment);
+    }
+
+    @Override
+    public Map<String, Object> listTableData(String tableName, Query query) {
+        Assert.hasText(tableName, "表格名称不能为空");
+        List<TableColumnVO> columnList = service.listColumnByTableName(tableName);
+        if (org.apache.commons.collections4.CollectionUtils.isEmpty(columnList)) {
+            return null;
+        }
+        String[] columns = columnList.stream().map(TableColumnVO::getColumnName).distinct().toArray(String[]::new);
+        String columnNameList = StringUtils.join(columns, ",");
+        Page page = PageHelper.startPage(query.getPageNum(), query.getPageSize(), true);
+        List<Map<String, Object>> list = mapper.selectTableDataList(tableName, columnNameList);
+        PageUtil<List<Map<String, Object>>> pageData = new PageUtil<>(page.getTotal(), page.getPages(), page.getPageNum(), list);
+        HashMap<String, Object> result = Maps.newHashMap();
+        result.put("head", columns);
+        result.put("pageData", pageData);
+        return result;
     }
 
     private String checkedExists(String tableName) {

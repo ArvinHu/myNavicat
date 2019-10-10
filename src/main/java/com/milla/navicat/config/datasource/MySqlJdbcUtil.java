@@ -102,7 +102,7 @@ public class MySqlJdbcUtil {
     // 3.连接方法getConnection()
     public static Connection getConnection(DataSourceVO datasource) {
         try {
-            return DriverManager.getConnection(datasource.getUrl(), datasource.getUsername(), datasource.getPassword());
+            return DriverManager.getConnection(datasource.getUrl() + "?characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=UTC", datasource.getUsername(), datasource.getPassword());
         } catch (SQLException e) {
             throw new DataSourceException("获取数据库连接失败");
         }
