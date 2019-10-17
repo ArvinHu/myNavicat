@@ -1,6 +1,7 @@
 package com.milla.navicat.controller.table;
 
 import com.milla.navicat.comm.Query;
+import com.milla.navicat.pojo.bo.DuplicateTableBo;
 import com.milla.navicat.pojo.vo.TableVO;
 import com.milla.navicat.service.ITableService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,8 @@ public class TableController {
 
     //复制表 0:仅表格结构 1：表结构和数据
     @PostMapping(value = "/duplication")
-    public void addTableCopy(String tableName, int category) {
-        tableService.addTableCopy(tableName, category);
+    public void addTableCopy(@RequestBody DuplicateTableBo duplication) {
+        tableService.addTableCopy(duplication.getTableName(), duplication.getCategory());
     }
 
     @DeleteMapping(value = "/{tableName}")

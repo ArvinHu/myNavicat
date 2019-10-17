@@ -5,12 +5,14 @@ import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Maps;
 import com.milla.navicat.comm.PageUtil;
 import com.milla.navicat.comm.Query;
+import com.milla.navicat.exception.DataSourceException;
 import com.milla.navicat.mapper.dynamic.SQLExecuteMapper;
 import com.milla.navicat.mapper.dynamic.TableDTOMapper;
 import com.milla.navicat.pojo.vo.TableColumnVO;
 import com.milla.navicat.pojo.vo.TableVO;
 import com.milla.navicat.service.ITableColumnService;
 import com.milla.navicat.service.ITableService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ import java.util.stream.Collectors;
  * @UpdateRemark: <>
  * @Version: 1.0
  */
+@Slf4j
 @Service
 public class TableServiceImpl implements ITableService {
 
@@ -111,7 +114,14 @@ public class TableServiceImpl implements ITableService {
         if (category == 0) {
             return;
         }
-        mapper.createTableByCopy(tableName, newTableName);
+        try {
+            mapper.createTableByCopy(tableName, newTableName);
+        } catch (Exception e) {
+            log.error("复制表格出现异常", e);
+            mapper.dropTable(newTableName);
+            throw new DataSourceException("表格复制失败");
+        }
+
     }
 
     @Override

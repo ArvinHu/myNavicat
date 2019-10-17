@@ -28,7 +28,7 @@ public interface TableDTOMapper {
 
     void createTableOnlyStructureByCopy(@Param("tableName") String tableName, @Param("newTableName") String newTableName);
 
-    void createTableByCopy(String tableName, String newTableName);
+    void createTableByCopy(@Param("tableName") String tableName, @Param("newTableName") String newTableName);
 
     void alterTableCommentByName(@Param("tableName") String tableName, @Param("tableComment") String tableComment);
 

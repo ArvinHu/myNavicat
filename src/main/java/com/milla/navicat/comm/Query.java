@@ -6,7 +6,7 @@ public class Query implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    protected Integer pageSize = 1000;
+    protected Integer pageSize = 500;
 
     protected Integer pageNum = 1;
 
