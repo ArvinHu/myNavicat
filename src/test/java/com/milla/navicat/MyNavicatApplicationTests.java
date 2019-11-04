@@ -1,7 +1,6 @@
 package com.milla.navicat;
 
-import com.milla.navicat.event.TableEvent;
-import com.milla.navicat.spring.study.service.SaleService;
+import com.milla.navicat.spring.study.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,20 +18,18 @@ public class MyNavicatApplicationTests {
 
     @Test
     public void contextLoads() {
-        TableEvent even = new TableEvent("send email bs");
-        context.publishEvent(even);
     }
 
     @Autowired
-    private SaleService saleService;
+    private OrderService saleService;
 
     @Test
     public void testDiscountByUserType() {
-        log.info("youke  类型的折扣：{}", saleService.sale("youke", 100));
-        log.info("normal 类型的折扣：{}", saleService.sale("normal", 100));
-        log.info("vip 类型的折扣：{}", saleService.sale("vip", 100));
-        log.info("svip 类型的折扣：{}", saleService.sale("svip", 100));
-        log.info("gold 类型的折扣：{}", saleService.sale("gold", 100));
+        log.info("youke  类型的折扣：{}", saleService.getPaymentAmount("youke", 100));
+        log.info("normal 类型的折扣：{}", saleService.getPaymentAmount("normal", 100));
+        log.info("vip 类型的折扣：{}", saleService.getPaymentAmount("vip", 100));
+        log.info("svip 类型的折扣：{}", saleService.getPaymentAmount("svip", 100));
+        log.info("gold 类型的折扣：{}", saleService.getPaymentAmount("gold", 100));
     }
 
 }
