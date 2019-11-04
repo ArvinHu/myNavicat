@@ -10,6 +10,8 @@ package com.milla.navicat.spring.study.service;
  * @UpdateRemark: <>
  * @Version: 1.0
  */
-public interface SaleService {
-    double sale(String userType, double fee);
+public interface OrderService {
+    double getPaymentAmount(String userType, double fee);
+
+    boolean payment(String userType, double amount, double discountAmount);
 }

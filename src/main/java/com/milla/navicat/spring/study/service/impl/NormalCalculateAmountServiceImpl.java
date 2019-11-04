@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class NormalCalculateAmountServiceImpl implements CalculateAmountService {
 
     @Override
-    public double saleByDisCount(double fee) {
+    public double getPaymentAmountByDisCount(double fee) {
         return fee * 0.9;
     }
 }

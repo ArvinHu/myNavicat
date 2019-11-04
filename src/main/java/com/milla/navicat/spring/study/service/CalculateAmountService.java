@@ -12,5 +12,5 @@ package com.milla.navicat.spring.study.service;
  */
 public interface CalculateAmountService {
     //根据用户的类型打折
-    double saleByDisCount(double fee);
+    double getPaymentAmountByDisCount(double fee);
 }
