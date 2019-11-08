@@ -23,7 +23,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @UpdateDate: 2018/4/8 9:10
  * @Version: 1.0
  */
-//@EnableWebMvc
 @EnableSwagger2
 @Configuration
 public class SwaggerConfig implements WebMvcConfigurer {
@@ -43,7 +42,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 .title("接口列表 v1.1.0") //接口文档名称
                 .description("接口测试") //接口描述
                 .termsOfServiceUrl("http://milla.com:8080/swagger-ui.html") // 接口地址
-                .contact(new Contact("MILLA", "www.mill.com", "milla.163.com"))//联系人
+                .contact(new Contact("MILLA", "www.mill.com", "milla@163.com"))//联系人
                 .version("1.1.0")
                 .build();
     }
