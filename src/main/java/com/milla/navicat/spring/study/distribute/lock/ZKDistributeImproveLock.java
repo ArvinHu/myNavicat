@@ -24,8 +24,6 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ZKDistributeImproveLock implements Lock {
 
-    private Lock lock = new ReentrantLock();
-
     private String lockPath;
 
     private String beforePath;
@@ -91,9 +89,7 @@ public class ZKDistributeImproveLock implements Lock {
 
         //如果当前节点是空创建临时连续节点
         if (this.currentPath == null) {
-//            System.out.println("------------------------------------------------");
             System.out.println(Thread.currentThread().getName() + " 执行过几次");
-//            System.out.println("------------------------------------------------");
             this.currentPath = this.client.createEphemeralSequential(lockPath + "/", "aaa");
         }
         //获取所有的子节点
@@ -103,12 +99,10 @@ public class ZKDistributeImproveLock implements Lock {
         Collections.sort(children);
         //判断当前节点是否是最小的
         if (currentPath.equals(lockPath + "/" + children.get(0))) {
-//            System.out.println("获取到锁 ; 线程名称：" + Thread.currentThread().getName() + " ;当前节点：" + currentPath + " ;前一个节点" + beforePath + " ;节点个数：" + children.size());
             return true;
         } else {
             int index = children.indexOf(currentPath.substring(lockPath.length() + 1));
             beforePath = lockPath + "/" + children.get(index - 1);
-//            System.out.println("获取不到锁; 线程名称：" + Thread.currentThread().getName() + " ;当前节点：" + currentPath + " ;前一个节点" + beforePath + " ;节点个数：" + children.size());
         }
         return false;
     }

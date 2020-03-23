@@ -20,7 +20,6 @@ public class OrderCodeGenerator {
         LocalDateTime rightNow = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss");
         String orderId = rightNow.format(formatter);
-//        return orderId + " - " + ++i;
-        return String.valueOf(++i);
+        return orderId + " - " + ++i;//简单的时间加整型自增[整型自增可用作是否唯一的依据]
     }
 }

@@ -56,7 +56,7 @@ public class ZKDistributeLock implements Lock {
 
             @Override
             public void handleDataDeleted(String dataPath) throws Exception {
-//                System.out.println("删除了节点....." + dataPath);
+                System.out.println("删除了节点....." + dataPath);
                 countDownLatch.countDown();
             }
         };
@@ -65,10 +65,8 @@ public class ZKDistributeLock implements Lock {
         //如果要创建的节点已经存在了就等待
         if (this.client.exists(lockPath)) {
             try {
-//                System.out.println(".........await().....start......");
                 //阻塞
                 countDownLatch.await();
-//                System.out.println(".........await().....o v e r......");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

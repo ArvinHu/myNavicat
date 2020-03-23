@@ -23,12 +23,13 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
 
         testThreeServiceWithThreadLocalLock();
-        testManyServiceWithThreadLocalLock();
-        testThreeServiceWithDistributeLock();
-        testManyServiceWithDistributeLock();
-        testThreeServiceWithImproveLock();
-        testWithReentrantLock();
-        testNoLock();
+//        testManyServiceWithThreadLocalLock();
+//        testThreeServiceWithDistributeLock();
+//        testManyServiceWithDistributeLock();
+//        testThreeServiceWithImproveLock();
+//        testThreeServiceWithReentrantLock();
+//        testWithReentrantLock();
+//        testNoLock();
     }
 
     //解决惊群效应，订单编号唯一
@@ -42,8 +43,7 @@ public class Main {
         IOrderService orderService2 = new OrderServiceDistributeThreadLocalLockImpl();
         IOrderService orderService3 = new OrderServiceDistributeThreadLocalLockImpl();
 
-        Set<String> sets = Sets.newHashSet();
-        highConcurrencyWithThreeService(currency, barrier, orderService1, orderService2, orderService3, sets);
+        highConcurrencyWithThreeService(currency, barrier, orderService1, orderService2, orderService3);
     }
 
     //解决惊群效应-订单唯一
@@ -74,6 +74,34 @@ public class Main {
         }
     }
 
+    //解决惊群效应-订单唯一
+    private static void testManyServiceWithDistributeImproveLock() throws InterruptedException {
+        //并发数量
+        int currency = 50;
+        //循环栅栏
+        CyclicBarrier barrier = new CyclicBarrier(currency);
+
+        Set<String> sets = Sets.newHashSet();
+        for (int i = 0; i < currency; i++) {
+            Thread task = new Thread(() -> {
+                //使用以下多实例订单均唯一，也都没有惊群效应
+                IOrderService service = new OrderServiceDistributeImproveLockImpl();
+                try {
+                    barrier.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+                String code = service.createOrderCode();
+                sets.add(code);
+                System.out.println("订单编号： " + code);
+            });
+            task.setName("线程" + i);
+            task.start();
+        }
+    }
+
 
     //解决惊群效应，但是在服务是共享的情况下订单编号不唯一[每一个线程一个实例的情况下订单也唯一]
     private static void testThreeServiceWithImproveLock() throws InterruptedException {
@@ -86,40 +114,9 @@ public class Main {
         IOrderService orderService2 = new OrderServiceDistributeImproveLockImpl();
         IOrderService orderService3 = new OrderServiceDistributeImproveLockImpl();
 
-        Set<String> sets = Sets.newHashSet();
-        highConcurrencyWithThreeService(currency, barrier, orderService1, orderService2, orderService3, sets);
+        highConcurrencyWithThreeService(currency, barrier, orderService1, orderService2, orderService3);
     }
 
-    private static void highConcurrencyWithThreeService(int currency, CyclicBarrier barrier, IOrderService orderService1, IOrderService orderService2, IOrderService orderService3, Set<String> sets) {
-        for (int i = 0; i < currency; i++) {
-            int finalI = i;
-            Thread task = new Thread(() -> {
-                try {
-                    barrier.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (BrokenBarrierException e) {
-                    e.printStackTrace();
-                }
-                if (finalI % 2 == 0) {
-                    String code = orderService1.createOrderCode();
-                    System.out.println("服务一： " + code);
-                    sets.add(code);
-                } else if (finalI % 3 == 0) {
-                    String code = orderService2.createOrderCode();
-                    System.out.println("服务二： " + code);
-                    sets.add(code);
-
-                } else {
-                    String code = orderService3.createOrderCode();
-                    System.out.println("服务三： " + code);
-                    sets.add(code);
-                }
-            });
-            task.setName("线程" + i);
-            task.start();
-        }
-    }
 
     //使用分布式锁-订单唯一，但是具有惊群效应的后遗症
     private static void testThreeServiceWithDistributeLock() throws InterruptedException {
@@ -132,8 +129,7 @@ public class Main {
         IOrderService orderService2 = new OrderServiceDistributeLockImpl();
         IOrderService orderService3 = new OrderServiceDistributeLockImpl();
 
-        Set<String> sets = Sets.newHashSet();
-        highConcurrencyWithThreeService(currency, barrier, orderService1, orderService2, orderService3, sets);
+        highConcurrencyWithThreeService(currency, barrier, orderService1, orderService2, orderService3);
     }
 
     //使用分布式锁-订单唯一，但是具有惊群效应的后遗症
@@ -156,7 +152,6 @@ public class Main {
                     e.printStackTrace();
                 }
                 String code = service.createOrderCode();
-                sets.add(code);
                 System.out.println("订单编号： " + code);
             });
             task.setName("线程" + i);
@@ -174,6 +169,48 @@ public class Main {
         IOrderService orderService = new OrderServiceReentrantLockImpl();
 
         simulationHighConcurrency(currency, barrier, orderService);
+    }
+
+    //使用可重入锁-分布式下不唯一
+    private static void testThreeServiceWithReentrantLock() throws InterruptedException {
+        //并发数量
+        int currency = 50;
+        //循环栅栏
+        CyclicBarrier barrier = new CyclicBarrier(currency);
+
+        IOrderService orderService1 = new OrderServiceReentrantLockImpl();
+        IOrderService orderService2 = new OrderServiceReentrantLockImpl();
+        IOrderService orderService3 = new OrderServiceReentrantLockImpl();
+
+        highConcurrencyWithThreeService(currency, barrier, orderService1, orderService2, orderService3);
+    }
+
+    private static void highConcurrencyWithThreeService(int currency, CyclicBarrier barrier, IOrderService orderService1, IOrderService orderService2, IOrderService orderService3) {
+        for (int i = 0; i < currency; i++) {
+            int finalI = i;
+            Thread task = new Thread(() -> {
+                try {
+                    barrier.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+                if (finalI % 2 == 0) {
+                    String code = orderService1.createOrderCode();
+                    System.out.println("服务一： " + code);
+                } else if (finalI % 3 == 0) {
+                    String code = orderService2.createOrderCode();
+                    System.out.println("服务二： " + code);
+
+                } else {
+                    String code = orderService3.createOrderCode();
+                    System.out.println("服务三： " + code);
+                }
+            });
+            task.setName("线程" + i);
+            task.start();
+        }
     }
 
     //不添加锁-不唯一

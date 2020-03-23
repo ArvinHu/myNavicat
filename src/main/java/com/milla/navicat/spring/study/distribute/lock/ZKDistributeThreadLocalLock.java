@@ -10,7 +10,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @Package: com.milla.navicat.spring.study.distribute.lock
@@ -89,8 +88,6 @@ public class ZKDistributeThreadLocalLock implements Lock {
 
         //如果当前节点是空创建临时连续节点
         if (this.currentPath.get() == null) {
-//            System.out.println("------------------------------------------------");
-//            System.out.println("------------------------------------------------");
             this.currentPath.set(this.client.createEphemeralSequential(lockPath + "/", "aaa"));
         }
         //获取所有的子节点
@@ -98,17 +95,13 @@ public class ZKDistributeThreadLocalLock implements Lock {
         List<String> children = client.getChildren(lockPath);
         //排序
         Collections.sort(children);
-//        System.out.println("节点名：" + children);
-//        System.out.println("兄弟节点：" + children);
         String currentNode = this.currentPath.get();
         //判断当前节点是否是最小的
         if (currentNode.equals(lockPath + "/" + children.get(0))) {
-//            System.out.println("获取到锁 ; 线程名称：" + Thread.currentThread().getName() + " ;当前节点：" + currentPath + " ;前一个节点" + beforePath + " ;节点个数：" + children.size());
             return true;
         } else {
             int index = children.indexOf(currentNode.substring(lockPath.length() + 1));
             beforePath.set(lockPath + "/" + children.get(index - 1));
-//            System.out.println("获取不到锁; 线程名称：" + Thread.currentThread().getName() + " ;当前节点：" + currentPath + " ;前一个节点" + beforePath + " ;节点个数：" + children.size());
         }
         return false;
     }
