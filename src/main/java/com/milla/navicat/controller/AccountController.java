@@ -2,6 +2,7 @@ package com.milla.navicat.controller;
 
 import com.milla.navicat.pojo.vo.AccountVO;
 import com.milla.navicat.service.IAccountService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -18,16 +19,16 @@ import javax.servlet.http.HttpSession;
  * @UpdateRemark: <>
  * @Version: 1.0
  */
-
+@Slf4j
 @RestController
 @RequestMapping(value = "/account", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class AccountController {
     @Autowired
-    IAccountService service;
+    private IAccountService service;
 
     @PostMapping(value = "/login")
     public String login(@RequestBody AccountVO account, HttpSession session) {
-        System.out.println("sessionId: " + session.getId());
+        log.debug("controller-sessionId：{}", session.getId());
         return service.login(account);
     }
 }
