@@ -10,6 +10,7 @@ import com.milla.navicat.util.WebUtil;
 import com.milla.navicat.util.token.JwtTokenProvider;
 import com.milla.navicat.util.token.MD5Util;
 import io.jsonwebtoken.impl.DefaultClaims;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import static com.milla.navicat.constant.HeaderParamConstant.C_TOKEN;
  * @Version: 1.0
  */
 @Service
+@Slf4j
 public class AccountServiceImpl implements IAccountService {
 
     @Autowired
@@ -53,7 +55,7 @@ public class AccountServiceImpl implements IAccountService {
         if (!StringUtils.equals(account.getPassword(), accountDTO.getPassword())) {
             throw new CustomMessageException("用户密码错误");
         }
-        //6：生成token(令牌)q
+        //6：生成token(令牌)
         String key = MD5Util.md5Sorted(account.getAccount() + account.getPassword() + System.nanoTime());
         DefaultClaims info = new DefaultClaims();
         info.put(C_CURRENT_ACCOUNT, account);
@@ -65,7 +67,7 @@ public class AccountServiceImpl implements IAccountService {
         tokenInfo.setTokenKey(key);
         tokenInfo.setExpiration(DateUtils.addDays(new Date(), 30).getTime());
         WebUtil.getSession().setAttribute(C_TOKEN, tokenInfo);
-        System.out.println(WebUtil.currentAccount() + "////////" + WebUtil.getSession().getId());
+        log.debug("当前用户：{},当前sessionId：{}", WebUtil.currentAccount(), WebUtil.getSession().getId());
         return token;
     }
 

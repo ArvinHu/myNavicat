@@ -14,7 +14,7 @@ import com.milla.navicat.spring.study.distribute.lock.service.IOrderService;
  * @Version: 1.0
  */
 public class OrderServiceImpl implements IOrderService {
-
+    //生程订单号的工具类
     private static OrderCodeGenerator generator = new OrderCodeGenerator();
 
     @Override

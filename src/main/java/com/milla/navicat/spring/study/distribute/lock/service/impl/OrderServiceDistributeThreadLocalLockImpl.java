@@ -26,6 +26,8 @@ public class OrderServiceDistributeThreadLocalLockImpl implements IOrderService 
     public String createOrderCode() {
         try {
             lock.lock();
+            System.out.println(generator);
+
             return generator.getOrderCode();
         } catch (Exception e) {
             e.printStackTrace();

@@ -40,6 +40,7 @@ public class TokenHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         String method = request.getMethod();
+        String servletPath = request.getServletPath();
         if (StringUtils.equalsIgnoreCase("OPTIONS", method)) {
             //不做任何处理
             return true;
@@ -86,8 +87,16 @@ public class TokenHandlerInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
     }
 
-    @Override
+    @Override//完成本次操作remove线程中的变量值，防止引起脏读或内存泄漏
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        //线程中的变量值需要remove，否则可能产生数据脏读或者是内存泄漏
+        //如果没有使用set方法容易引起脏读数据，如果没有使用remove方法，容易引起内存泄漏，如果没有使用get方法ThreadLocal就没有意义了
         DBContextHolder.clearDataSource();
+        //redis的作用
+        //1、分布式锁
+        //2、消息队列
+        //3、发布订阅
+        //4、高可用
+        //5、集群,哨兵，主备
     }
 }

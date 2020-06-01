@@ -18,6 +18,7 @@ public class MyNavicatApplicationTests {
 
     @Test
     public void contextLoads() {
+        Long i = (long) 32;
     }
 
     @Autowired

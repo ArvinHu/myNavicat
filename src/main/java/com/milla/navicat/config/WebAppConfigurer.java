@@ -1,9 +1,10 @@
 package com.milla.navicat.config;
 
 import com.google.common.collect.Lists;
-import com.milla.navicat.interceptor.TokenHandlerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -22,19 +23,28 @@ import java.util.ArrayList;
  */
 @Configuration
 public class WebAppConfigurer implements WebMvcConfigurer {
+
+    @Value("${swagger.enable.active:true}")
+    private boolean enableSwagger;
+
     @Autowired
-    private TokenHandlerInterceptor interceptor;
+    private HandlerInterceptor interceptor;//使用父类添加白名单
 
     //配置拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(interceptor).addPathPatterns("/**");
+        if (!enableSwagger) {
+            registry.addInterceptor(interceptor).addPathPatterns("/**");
+            return;
+        }
+        //启用swagger
         ArrayList<String> list = Lists.newArrayList();
         list.add("/swagger-resources/**");
         list.add("/swagger-ui.html");
         list.add("/swagger-resources");
         list.add("/v2/api-docs");
         list.add("/webjars/**");
+        list.add("/error");
         list.add("/account/login");
         registry.addInterceptor(interceptor).addPathPatterns("/**").excludePathPatterns(list);
     }
