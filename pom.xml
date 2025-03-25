@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.milla</groupId>
     <artifactId>navicat</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>myNavicat</name>
     <description>myNavicat project for Spring Boot</description>
 
