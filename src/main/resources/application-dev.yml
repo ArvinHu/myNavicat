@@ -23,7 +23,7 @@ spring:
       #连接测试查询
       connection-test-query: SELECT 1
       #自动提交
-      auto-commit: true
+      auto-commit: false
 server:
   port: 80
   servlet:
